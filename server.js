@@ -4,11 +4,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 const authRoute = require('./routes/routes');
 const session = require('express-session')
-var cookieParser = require('cookie-parser')
 
 const PORT = 3000;
 
-app.use(cookieParser())
 
 app.use(session({
     secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",

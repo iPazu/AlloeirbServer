@@ -5,7 +5,8 @@ async function createUser(user_id){
     try {
         conn = await pool.getConnection();
         console.log("creating user");
-        const res = await conn.query("INSERT INTO users value (?, ?,?,?)", [user_id, "0",'now','before']);
+        let date = getCurrentDate();
+        const res = await conn.query("INSERT INTO users value (?,?,?,?,?)", [user_id,date,date,false,false]);
         console.log(res);
     } catch (err) {
         throw err;
@@ -22,8 +23,11 @@ async function userExist(user_id,_then){
         console.log(user_id)
         const rows = await conn.query("SELECT COUNT(1) FROM `users` WHERE user_id=?", [user_id]);
         let number = rows[0]["COUNT(1)"]
+        await conn.query("UPDATE users SET user_lastconnection = ? WHERE user_id= ?", [getCurrentDate(),user_id]);
+        console.log("updated date")
         if(number === 0){
             console.log("undefined")
+
             _then(false);
         }
         else{
@@ -37,4 +41,10 @@ async function userExist(user_id,_then){
     }
 }
 
+function getCurrentDate(){
+    let today = new Date();
+    let date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    return date+' '+time;
+}
 module.exports = { userExist, createUser };
