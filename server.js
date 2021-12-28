@@ -4,9 +4,30 @@ const dotenv = require('dotenv');
 dotenv.config();
 const authRoute = require('./routes/routes');
 const session = require('express-session')
+const productRequests = require('./sql/productRequests')
+const rateLimit = require("express-rate-limit");
+
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 500 // limit each IP to 100 requests per windowMs
+});
+
 
 const PORT = 3000;
+async function mainTask(i){
+    i++;
+    await productRequests.updateProductsFromDB((data) =>{
+        console.log("Successfully fetched");
+    });
+    await sleep(1000*60*10);
+    await mainTask(i);
+}
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+app.use(limiter);
 
 app.use(session({
     secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",
@@ -22,11 +43,22 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
+app.post('/pusher/auth', function(req, res) {
+    var socketId = req.body.socket_id;
+    var channel = req.body.channel_name;
+    var auth = pusher.authenticate(socketId, channel);
+    res.send(auth);
+});
 app.use(express.json());
+
 app.use('/api',authRoute);
 
 
 
-
-app.listen(PORT, () => console.log("Server started"));
+app.listen(PORT, () => {
+    console.log("Server started")
+    mainTask(0)
+});
 
