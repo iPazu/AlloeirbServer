@@ -2,7 +2,7 @@
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const bodyParser = require("body-parser");
-let coursierLocation = {}
+let coursierLocation = {alaboirie: {latitude:43.66199693275686, longitude:1.480274969014603}}
 
 async function checkPrivilege(req,_then){
     if(req.session.user_id){
@@ -83,6 +83,10 @@ module.exports.acceptCommand = async (req,res) => {
 module.exports.acceptCoursier = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
         if(privilege){
+            if(coursierLocation['req.session.user_id' === undefined]){
+                res.sendStatus(407)
+                return;
+            }
             let order_id = req.params.orderid;
             console.log("Accepting coursier");
             console.log(order_id)
@@ -94,6 +98,7 @@ module.exports.acceptCoursier = async (req,res) => {
                             console.log("User match with order");
                             if(data.status === "preparing"){
                                 orderRequests.selectCoursier(req.session.user_id,order_id);
+
                                 console.log("Successfuly changed coursier");
                                 res.sendStatus(200)
                             }

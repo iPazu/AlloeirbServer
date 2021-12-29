@@ -1,5 +1,6 @@
 const pool = require("./database");
 const {getCurrentDate} = require("./userRequests");
+const axios = require("axios");
 
 
 async function createOrder(jsonOrder,user_id,_then){
@@ -8,10 +9,11 @@ async function createOrder(jsonOrder,user_id,_then){
         conn = await pool.getConnection();
         console.log("creating order");
         let id = makeid(16);
-        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?)",
+        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [id,user_id, getTotal(jsonOrder),jsonOrder.adress,
                 jsonOrder.products
-                ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','']);
+                ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','']);
+        await setCoordonates(jsonOrder.adress,id);
         await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
         console.log(res);
         _then(id);
@@ -114,7 +116,57 @@ async function changeStatus(status,order_id){
         if (conn) return conn.end();
     }
 }
+async function setGeoPath(pos1,pos2){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("make query")
+        await conn.query("UPDATE `geojsonPath` SET `status`=? WHERE id=?", [status]);
 
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
+function fetchPath(pos1,pos2,_callback){
+    const config = {
+        headers: {
+            'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
+        },
+    };
+    uri = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248b6a8d55e0873484e9fdfce09ec950e99&start=1.4803005003724554,43.66198157579554&end=1.5093173060193614,43.692808267519624"
+    axios.get(uri, config)
+        .then((response) => _callback(response.data.features[0].geometry.coordinates))
+        .catch((error) => console.log(error.response));
+}
+function getCoordonatesFromString(string,_callback){
+    location = string.replace(" ","%20")
+    console.log('get coordonates')
+    uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?country=FR&access_token=pk.eyJ1IjoianNjYXN0cm8iLCJhIjoiY2s2YzB6Z25kMDVhejNrbXNpcmtjNGtpbiJ9.28ynPf1Y5Q8EyB_moOHylw`
+    axios.get(uri)
+        .then((response) => {
+            console.log("coordonates gotten")
+            console.log(response.data.features[0].center)
+            _callback(response.data.features[0].center)
+        })
+        .catch((error) => console.log(error.response));
+}
+async function setCoordonates(string,orderid){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("Setting coordonates")
+        getCoordonatesFromString(string,(position) => {
+             conn.query("UPDATE `orders` SET `latitude`=? WHERE id=?", [position[0],orderid]);
+             conn.query("UPDATE `orders` SET `longitude`=? WHERE id=?", [position[1],orderid]);
+        })
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
 async function setRanking(ranking,message,order_id){
     let conn;
     try {
@@ -134,4 +186,4 @@ function getTotal(jsonObject){
     return 0
 }
 
-module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking};
+module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath};

@@ -6,6 +6,7 @@ const authRoute = require('./routes/routes');
 const session = require('express-session')
 const productRequests = require('./sql/productRequests')
 const rateLimit = require("express-rate-limit");
+const {fetchPath} = require("./sql/orderRequest");
 
 
 const limiter = rateLimit({

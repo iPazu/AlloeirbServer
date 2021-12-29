@@ -23,15 +23,14 @@ router.get("/order/delivered/:orderid", adminController.delivered);
 
 router.post("/order/ranking/:orderid", orderController.rankOrder);
 
-router.post("/order/location/update", adminController.updateCoursierLocation);
+router.post("/location/update", adminController.updateCoursierLocation);
 
-router.get("/order/location/:orderid", orderController.getLocationUpdate);
+router.get("/location/:orderid", orderController.getLocationUpdate);
 
 
 router.get("/order/fetch", adminController.fetchOrders);
 
 router.get("/products", userController.fetchProducts);
-
 
 router.get("/login/:token/:ticket", userController.atemptAuthentification);
 
