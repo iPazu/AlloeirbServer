@@ -1,6 +1,7 @@
 
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
+const bodyParser = require("body-parser");
 let coursierLocation = {}
 
 async function checkPrivilege(req,_then){
@@ -21,14 +22,15 @@ async function checkPrivilege(req,_then){
 }
 
 module.exports.updateCoursierLocation = async (req,res) => {
-    await checkPrivilege(req,(privilege) => {
-        if(privilege){
-            coursierLocation[req.session.user_id] = req.body
+        if(req.body[0].key === "YfyguDreugUchcuHiv"){
+            console.log("updating coursize location")
+            console.log(req.body)
+            let position = req.body[0]
+            coursierLocation[position.id] = {latitude: position.latitude,longitude: position.longitude}
+            console.log(coursierLocation)
+            res.sendStatus(200)
         }
-        else {
-            res.sendStatus(400)
-        }
-    })
+
 }
 module.exports.fetchOrders = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
