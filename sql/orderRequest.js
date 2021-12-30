@@ -1,6 +1,8 @@
 const pool = require("./database");
 const {getCurrentDate} = require("./userRequests");
 const axios = require("axios");
+const fs = require('fs');
+const {order} = require("../controller/orderController");
 
 
 async function createOrder(jsonOrder,user_id,_then){
@@ -9,10 +11,10 @@ async function createOrder(jsonOrder,user_id,_then){
         conn = await pool.getConnection();
         console.log("creating order");
         let id = makeid(16);
-        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [id,user_id, getTotal(jsonOrder),jsonOrder.adress,
                 jsonOrder.products
-                ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','']);
+                ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
         await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
         console.log(res);
@@ -116,12 +118,38 @@ async function changeStatus(status,order_id){
         if (conn) return conn.end();
     }
 }
-async function setGeoPath(pos1,pos2){
+async function setGeoPath(pos1,pos2,orderid){
     let conn;
     try {
         conn = await pool.getConnection();
         console.log("make query")
-        await conn.query("UPDATE `geojsonPath` SET `status`=? WHERE id=?", [status]);
+        fetchPath(pos1,pos2, (data) => {
+            console.log("got geopath")
+            console.log(data.features[0].geometry.coordinates)
+            console.log(data.features[0].properties.segments[0].duration)
+            console.log(data.features[0].properties.segments[0].distance)
+            fs.readFile('paths.json', function readFileCallback(err, jsonData) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("Writting in file")
+                    let obj = JSON.parse(jsonData);
+                    console.log(obj)
+                    obj[orderid] = data.features[0].geometry.coordinates
+                    let json = JSON.stringify(obj);
+                    console.log(obj)
+
+                    fs.writeFile('paths.json', json,function(err, result) {
+                        if(err) console.log('error', err);
+                    });
+                    console.log("File written")
+
+                }
+            });
+             conn.query("UPDATE `orders` SET `deliveryTime`=? WHERE id=?", [data.features[0].properties.segments[0].duration,orderid]);
+             conn.query("UPDATE `orders` SET `distance`=? WHERE id=?", [data.features[0].properties.segments[0].distance,orderid]);
+        })
+
 
     } catch (err) {
         throw err;
@@ -135,11 +163,15 @@ function fetchPath(pos1,pos2,_callback){
             'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
         },
     };
-    uri = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248b6a8d55e0873484e9fdfce09ec950e99&start=1.4803005003724554,43.66198157579554&end=1.5093173060193614,43.692808267519624"
+    let pos1s = pos1.longitude +","+ pos1.latitude;
+    let pos2s = pos2.longitude +","+ pos2.latitude;
+    uri = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248b6a8d55e0873484e9fdfce09ec950e99&start=${pos1s}&end=${pos2s}`
     axios.get(uri, config)
-        .then((response) => _callback(response.data.features[0].geometry.coordinates))
+        .then((response) => _callback(response.data))
         .catch((error) => console.log(error.response));
 }
+
+
 function getCoordonatesFromString(string,_callback){
     location = string.replace(" ","%20")
     console.log('get coordonates')
@@ -158,8 +190,8 @@ async function setCoordonates(string,orderid){
         conn = await pool.getConnection();
         console.log("Setting coordonates")
         getCoordonatesFromString(string,(position) => {
-             conn.query("UPDATE `orders` SET `latitude`=? WHERE id=?", [position[0],orderid]);
-             conn.query("UPDATE `orders` SET `longitude`=? WHERE id=?", [position[1],orderid]);
+             conn.query("UPDATE `orders` SET `latitude`=? WHERE id=?", [position[1],orderid]);
+             conn.query("UPDATE `orders` SET `longitude`=? WHERE id=?", [position[0],orderid]);
         })
     } catch (err) {
         throw err;
@@ -186,4 +218,4 @@ function getTotal(jsonObject){
     return 0
 }
 
-module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath};
+module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath,setGeoPath};

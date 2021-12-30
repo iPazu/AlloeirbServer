@@ -2,6 +2,7 @@
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const bodyParser = require("body-parser");
+
 let coursierLocation = {alaboirie: {latitude:43.66199693275686, longitude:1.480274969014603}}
 
 async function checkPrivilege(req,_then){
@@ -22,10 +23,10 @@ async function checkPrivilege(req,_then){
 }
 
 module.exports.updateCoursierLocation = async (req,res) => {
-        if(req.body[0].key === "YfyguDreugUchcuHiv"){
+        if(req.body.pos.key === "YfyguDreugUchcuHiv"){
             console.log("updating coursize location")
             console.log(req.body)
-            let position = req.body[0]
+            let position = req.body.pos
             coursierLocation[position.id] = {latitude: position.latitude,longitude: position.longitude}
             console.log(coursierLocation)
             res.sendStatus(200)
@@ -83,7 +84,7 @@ module.exports.acceptCommand = async (req,res) => {
 module.exports.acceptCoursier = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
         if(privilege){
-            if(coursierLocation['req.session.user_id' === undefined]){
+            if(coursierLocation[req.session.user_id] === undefined){
                 res.sendStatus(407)
                 return;
             }
@@ -98,7 +99,9 @@ module.exports.acceptCoursier = async (req,res) => {
                             console.log("User match with order");
                             if(data.status === "preparing"){
                                 orderRequests.selectCoursier(req.session.user_id,order_id);
-
+                                let deliverypos = {longitude: data.longitude, latitude: data.latitude}
+                                console.log(coursierLocation[req.session.user_id])
+                                orderRequests.setGeoPath(deliverypos,coursierLocation[req.session.user_id],data.id)
                                 console.log("Successfuly changed coursier");
                                 res.sendStatus(200)
                             }

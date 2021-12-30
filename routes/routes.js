@@ -11,7 +11,6 @@ router.post("/order", orderController.order);
 
 router.get("/order/get/:orderid", orderController.fetchOrder);
 
-router.get("/order/update/:orderid", orderController.fetchOrderUpdate);
 
 router.get("/order/cancel/:orderid", orderController.cancelOrder);
 
@@ -25,7 +24,6 @@ router.post("/order/ranking/:orderid", orderController.rankOrder);
 
 router.post("/location/update", adminController.updateCoursierLocation);
 
-router.get("/location/:orderid", orderController.getLocationUpdate);
 
 
 router.get("/order/fetch", adminController.fetchOrders);

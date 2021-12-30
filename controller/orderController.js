@@ -2,6 +2,9 @@ const {userExist, getUserOrder} = require("../sql/userRequests");
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const adminController = require('../controller/adminController');
+const {getCoursierLocation} = require("./adminController");
+const fs = require('fs');
+
 
 
 module.exports.order = async (req,res) => {
@@ -50,36 +53,19 @@ module.exports.fetchOrder = async (req,res) => {
             orderRequests.getOrder(order_id, (data) => {
                 if(data.user_id === req.session.user_id){ //Change this to allow admin and coursier
                     console.log("User match with order");
-                    res.send(data)
-                }else{
-                    console.log("User doesn't match with order");
-                    res.sendStatus(400);
-                }
-            })
-        } else {
-            res.sendStatus(400);
-        }
-    })
-};
-module.exports.getLocationUpdate = async (req,res) => {
-    let order_id = req.params.orderid;
-    console.log("Fetching location");
-
-    await orderRequests.orderExist(order_id, (exist) => {
-        console.log(exist)
-        if (exist) {
-            console.log("Order exist")
-            orderRequests.getOrder(order_id, (data) => {
-                if(data.user_id === req.session.user_id){ //Change this to allow admin and coursier
-                    console.log("User match with order");
-                    if(data.coursier !== 'undefined'){
-                        res.send(adminController.getCoursierLocation()[data.coursier])
-                        console.log("location")
-                        console.log(adminController.getCoursierLocation()[data.coursier])
-                        res.sendStatus(200);
+                    if(data.status === 'delivering'){
+                        console.log("setting coursier position")
+                        console.log(getCoursierLocation()[data.coursier])
+                        data['coursierpos'] = [getCoursierLocation()[data.coursier]]
+                            getGeoJSON(data.id, (geojson) => {
+                                data['geojsonPath'] = geojson
+                                console.log("sending data with path")
+                                res.send(data)
+                            })
                     }
                     else
-                        res.sendStatus(400)
+                        res.send(data)
+
                 }else{
                     console.log("User doesn't match with order");
                     res.sendStatus(400);
@@ -90,28 +76,7 @@ module.exports.getLocationUpdate = async (req,res) => {
         }
     })
 };
-module.exports.fetchOrderUpdate = async (req,res) => {
-    let order_id = req.params.id;
-    console.log("Fetching order update");
-    await orderRequests.orderExist(order_id, (exist) => {
-        console.log(exist)
-        if (exist) {
-            console.log("Order exist")
-            orderRequests.getOrder(order_id, (data) => {
-                if(data.user_id === req.session.user_id){ //Change this to allow admin and coursier
-                    console.log("User match with order");
-                    res.send(data)
-                    res.sendStatus(200);
-                }else{
-                    console.log("User doesn't match with order");
-                    res.sendStatus(400);
-                }
-            })
-        } else {
-            res.sendStatus(400);
-        }
-    })
-};
+
 module.exports.cancelOrder = async (req,res) => {
     let order_id = req.params.orderid;
     console.log("Canceling order");
@@ -177,3 +142,15 @@ module.exports.rankOrder = async (req,res) => {
         }
     })
 };
+
+function getGeoJSON(orderid,_callback){
+    fs.readFile('paths.json', function readFileCallback(err, jsonData) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Reading paths file")
+            let obj = JSON.parse(jsonData);
+            _callback(obj[orderid])
+        }
+    });
+}
