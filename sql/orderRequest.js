@@ -3,6 +3,7 @@ const {getCurrentDate} = require("./userRequests");
 const axios = require("axios");
 const fs = require('fs');
 const {order} = require("../controller/orderController");
+const {getProducts} = require("./productRequests");
 
 
 async function createOrder(jsonOrder,user_id,_then){
@@ -12,7 +13,7 @@ async function createOrder(jsonOrder,user_id,_then){
         console.log("creating order");
         let id = makeid(16);
         const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [id,user_id, getTotal(jsonOrder),jsonOrder.adress,
+            [id,user_id, getTotal(jsonOrder.products),jsonOrder.adress,
                 jsonOrder.products
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
@@ -215,7 +216,18 @@ async function setRanking(ranking,message,order_id){
 }
 //need to be done
 function getTotal(jsonObject){
-    return 0
+    let products  = getProducts()
+    let total = 0;
+    for(productid in jsonObject){
+        for (let key in products) {
+            if(products[key].id === productid){
+               total+= products[key].unit_price*jsonObject[productid]
+            }
+        }
+    }
+
+    return total
+
 }
 
 module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath,setGeoPath};
