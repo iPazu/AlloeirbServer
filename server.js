@@ -31,7 +31,7 @@ function sleep(ms) {
 }
 app.use(limiter);
 
-app.enable('trust proxy'); // optional, not needed for secure cookies
+app.set("trust proxy", 1);
 
 app.use(session({
     secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",
