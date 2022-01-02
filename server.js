@@ -13,7 +13,6 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 500 // limit each IP to 100 requests per windowMs
 });
-app.set("trust proxy", 1);
 
 
 const PORT = process.env.PORT || 3000 ;
@@ -32,12 +31,17 @@ function sleep(ms) {
 }
 app.use(limiter);
 
-app.use(session({
-    secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",
-    saveUninitialized:false,
-    cookie: { httpOnly: true,maxAge: 1000 * 60 * 60 * 24 },
-    resave: false
+app.enable('trust proxy'); // optional, not needed for secure cookies
+app.use(express.session({
+    secret : 'SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e',
+    key : 'sid',
+    proxy : true, // add this when behind a reverse proxy, if you need secure cookies
+    cookie : {
+        secure : true,
+        maxAge: 5184000000 // 2 months
+    }
 }));
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_HOST);
     res.setHeader("Access-Control-Allow-Credentials" ,'true');
