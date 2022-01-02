@@ -19,6 +19,7 @@ const PORT = 3000;
 async function mainTask(i){
     i++;
     await productRequests.updateProductsFromDB((data) =>{
+
         console.log("Successfully fetched");
     });
     await sleep(1000*60*10);
