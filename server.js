@@ -37,7 +37,10 @@ app.use(session({
     secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",
     saveUninitialized:false,
     proxy : true, // add this when behind a reverse proxy, if you need secure cookies
-    cookie: { httpOnly: true,maxAge: 1000 * 60 * 60 * 24 },
+    cookie: {
+        httpOnly: true,
+        domain: process.env.CLIENT_HOST ,
+        maxAge: 1000 * 60 * 60 * 24 },
     resave: false
 }));
 app.use((req, res, next) => {
