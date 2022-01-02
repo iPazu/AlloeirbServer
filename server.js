@@ -40,7 +40,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         path: '/',
-        domain: 'alloeirbclient.vercel.app',
+        domain: '.vercel.app',
 
         sameSite: 'none',
         secure: true,
