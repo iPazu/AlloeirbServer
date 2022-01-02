@@ -2,7 +2,6 @@ const pool = require("./database");
 const {getCurrentDate} = require("./userRequests");
 const axios = require("axios");
 const fs = require('fs');
-const {order} = require("../controller/orderController");
 const {getProducts} = require("./productRequests");
 
 

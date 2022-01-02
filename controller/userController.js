@@ -11,6 +11,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     let casticket = req.params.ticket;
     console.log(castoken);
     console.log(casticket);
+    user_id = "alaboirie"
     let user_id = await getCasUserID(castoken, casticket)
     //Initialise session
     let sess = req.session;

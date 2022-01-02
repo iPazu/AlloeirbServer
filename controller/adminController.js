@@ -1,7 +1,6 @@
 
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
-const bodyParser = require("body-parser");
 
 let coursierLocation = {alaboirie: {latitude:43.66199693275686, longitude:1.480274969014603}}
 

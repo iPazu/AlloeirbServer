@@ -1,7 +1,6 @@
 const {userExist, getUserOrder} = require("../sql/userRequests");
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
-const adminController = require('../controller/adminController');
 const {getCoursierLocation} = require("./adminController");
 const fs = require('fs');
 
