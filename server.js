@@ -31,16 +31,13 @@ function sleep(ms) {
 }
 app.use(limiter);
 
-app.use(express.session({
-    secret : 'SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e',
-    key : 'sid',
+app.use(session({
+    secret: "SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e",
+    saveUninitialized:false,
     proxy : true, // add this when behind a reverse proxy, if you need secure cookies
-    cookie : {
-        secure : true,
-        maxAge: 5184000000 // 2 months
-    }
+    cookie: { httpOnly: true,maxAge: 1000 * 60 * 60 * 24 },
+    resave: false
 }));
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_HOST);
     res.setHeader("Access-Control-Allow-Credentials" ,'true');
