@@ -15,7 +15,7 @@ const limiter = rateLimit({
 });
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000 ;
 async function mainTask(i){
     i++;
     await productRequests.updateProductsFromDB((data) =>{
