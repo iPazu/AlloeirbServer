@@ -13,6 +13,7 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 500 // limit each IP to 100 requests per windowMs
 });
+app.set("trust proxy", 1);
 
 
 const PORT = process.env.PORT || 3000 ;
