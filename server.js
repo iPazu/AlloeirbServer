@@ -39,6 +39,9 @@ app.use(session({
     proxy : true, // add this when behind a reverse proxy, if you need secure cookies
     cookie: {
         httpOnly: true,
+        path: '/',
+        domain: 'alloeirbclient.vercel.app',
+
         sameSite: 'none',
         secure: true,
         maxAge: 1000 * 60 * 60 * 24 },
