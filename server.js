@@ -31,7 +31,6 @@ function sleep(ms) {
 }
 app.use(limiter);
 
-app.enable('trust proxy'); // optional, not needed for secure cookies
 app.use(express.session({
     secret : 'SuF0ikdxxnoM4OBDRISQiHIEPKqpnM8e',
     key : 'sid',
