@@ -61,7 +61,7 @@ async function getCasUserID(token, ticket) {
             data = str
         });
     data = data.substring(
-        data.indexOf("cas:user>a") + 1,
+        data.indexOf("cas:user>") + 1,
         data.lastIndexOf("</cas:user")
     );
     data = data.slice(8);
