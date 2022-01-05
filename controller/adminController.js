@@ -5,9 +5,9 @@ const userRequests = require('../sql/userRequests')
 let coursierLocation = {alaboirie: {latitude:43.66199693275686, longitude:1.480274969014603}}
 
 async function checkPrivilege(req,_then){
-    if(req.session.user_id){
+    if(req.user_id){
         console.log("Fetching orders")
-        await userRequests.getPrivilege(req.session.user_id, (privilege) => {
+        await userRequests.getPrivilege(req.user_id, (privilege) => {
             console.log(privilege)
             if (privilege === 'coursier' || privilege === 'admin') {
                 console.log("Right privileges");
@@ -83,7 +83,7 @@ module.exports.acceptCommand = async (req,res) => {
 module.exports.acceptCoursier = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
         if(privilege){
-            if(coursierLocation[req.session.user_id] === undefined){
+            if(coursierLocation[req.user_id] === undefined){
                 res.sendStatus(407)
                 return;
             }
@@ -97,10 +97,10 @@ module.exports.acceptCoursier = async (req,res) => {
                     orderRequests.getOrder(order_id, (data) => {
                             console.log("User match with order");
                             if(data.status === "preparing"){
-                                orderRequests.selectCoursier(req.session.user_id,order_id);
+                                orderRequests.selectCoursier(req.user_id,order_id);
                                 let deliverypos = {longitude: data.longitude, latitude: data.latitude}
-                                console.log(coursierLocation[req.session.user_id])
-                                orderRequests.setGeoPath(deliverypos,coursierLocation[req.session.user_id],data.id)
+                                console.log(coursierLocation[req.user_id])
+                                orderRequests.setGeoPath(deliverypos,coursierLocation[req.user_id],data.id)
                                 console.log("Successfuly changed coursier");
                                 res.sendStatus(200)
                             }

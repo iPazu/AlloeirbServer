@@ -1,21 +1,21 @@
 const fetch = require('node-fetch');
 const userRequest = require('../sql/userRequests')
 const {getProducts} = require("../sql/productRequests");
+const jwt = require("jsonwebtoken")
 
 
 module.exports.atemptAuthentification = async (req, res) => {
     console.log("auth")
 
     let castoken = req.params.token;
-
     let casticket = req.params.ticket;
     console.log(castoken);
     console.log(casticket);
     let user_id = await getCasUserID(castoken, casticket)
     user_id = "alaboirie"
-
+    const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
     //Initialise session
-    let sess = req.session;
+    let sess = req;
     await userRequest.userExist(user_id, (exist,id,privilege) => {
         if (!exist) {
             console.log("doesn't exist");
@@ -24,16 +24,30 @@ module.exports.atemptAuthentification = async (req, res) => {
         console.log("user exist")
         sess.user_id = user_id;
         let orderid = id.orderid;
-        res.send({user_id,orderid,privilege});
+        res.send({user_id,orderid,privilege,accessToken});
     });
 };
 
 module.exports.fetchUserID = (req, res) => {
-    if (req.session.user_id) {
-        res.send(req.session.user_id)
-    } else {
+    const authHeader = req.headers['authorization']
+    console.log(req.headers)
+    const token = authHeader && authHeader.split(' ')[1]
+    console.log(token)
+    if (token == null){
         res.send('undefined');
+        return;
     }
+
+    jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+        console.log(err)
+        if (err) {
+            res.send('undefined');
+            return;
+        }
+        console.log(user)
+        res.send(user)
+    })
+
 };
 
 async function getCasUserID(token, ticket) {
@@ -56,7 +70,7 @@ async function getCasUserID(token, ticket) {
 
 module.exports.fetchProducts = async (req, res) => {
     console.log("Fetching products user")
-    if(req.session.user_id){
+    if(req.user_id){
         try {
             console.log("Sending products");
             res.send(JSON.stringify(getProducts()));
