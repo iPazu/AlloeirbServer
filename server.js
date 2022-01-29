@@ -20,7 +20,11 @@ async function mainTask(i){
     i++;
     await productRequests.updateProductsFromDB((data) =>{
 
-        console.log("Successfully fetched");
+        console.log("Successfully fetched products");
+    });
+    await productRequests.updateCodesFromDB((data) =>{
+
+        console.log("Successfully fetched codes");
     });
     await sleep(1000*60*10);
     await mainTask(i);

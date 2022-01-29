@@ -1,4 +1,5 @@
 const pool = require("./database");
+const {getCodes} = require("../sql/productRequests");
 
 
 async function createUser(user_id){
@@ -7,7 +8,7 @@ async function createUser(user_id){
         conn = await pool.getConnection();
         console.log("creating user");
         let date = getCurrentDate();
-        const res = await conn.query("INSERT INTO users value (?,?,?,?,?)", [user_id,date,date,'undefined','customer']);
+        const res = await conn.query("INSERT INTO users value (?,?,?,?,?,?)", [user_id,date,date,'undefined','','customer']);
         console.log(res);
         console.log("User successfully created");
     } catch (err) {
@@ -33,10 +34,10 @@ async function userExist(user_id,_then){
             _then(false,'undefined');
         }
         else{
-            const order_id = await conn.query("SELECT orderid FROM `users` WHERE user_id=?", [user_id]);
-            const privilege = await conn.query("SELECT privilege FROM `users` WHERE user_id=?", [user_id]);
+            const userdata = await conn.query("SELECT orderid,privilege,codes FROM `users` WHERE user_id=?", [user_id]);
             console.log("defined")
-            _then(true,order_id[0],privilege[0].privilege);
+            console.log(userdata)
+            _then(true,userdata[0].orderid,userdata[0].privilege,userdata[0].codes);
         }
     } catch (err) {
         throw err;
@@ -80,6 +81,19 @@ async function getPrivilege(user_id,_then){
         if (conn) return conn.end();
     }
 }
+async function getCodesFromDB(user_id,_then){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("getting codes")
+        const rows = await conn.query("SELECT codes FROM `users` WHERE user_id=?", [user_id]);
+        _then(rows[0].codes)
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
 
 async function removeOrderId(user_id){
     let conn;
@@ -115,6 +129,73 @@ async function updateUserOrderID(user_id,_then){
         if (conn) return conn.end();
     }
 }
+async function addPromotionCode(code,user_id,_then){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+
+        const codes = getCodes();
+        console.log(codes)
+        let exist = false
+        let notinuser = true
+        let codexpired = false
+        codes.map((c) => {
+            console.log(code)
+            if(c.name === code && c.disponible === 1){
+                exist = true
+                let expiration = new Date(c.expiration);
+                let now = new Date();
+                if(expiration.getTime() < now.getTime() || c.quantity < 1){
+                    codexpired = true
+                }
+            }
+        })
+
+        if(exist && !codexpired){
+            const usercodes = await conn.query("SELECT codes FROM `users` WHERE user_id=?", [user_id]);
+            console.log(usercodes[0].codes)
+            let newcodes;
+            if( usercodes[0].codes === ''){
+                newcodes = code
+            }
+            else{
+                console.log("eee")
+                console.log(usercodes[0].codes.split(','))
+                usercodes[0].codes.split(',').map((c) => {
+                    if(c === code){
+                        console.log('already')
+                        notinuser = false
+                    }
+                })
+                newcodes = usercodes[0].codes + "," + code;
+            }
+            if(notinuser){
+                await conn.query("UPDATE users SET codes = ? WHERE user_id= ?", [newcodes ,user_id]);
+                await conn.query("UPDATE codes SET quantity = quantity -1  WHERE name= ?", [code]);
+
+            }
+
+        }
+        if(!exist){
+            _then(408)
+
+        }
+        else if(codexpired){
+            _then(418)
+        }
+        else if(!notinuser){
+            _then(409)
+        }
+        else{
+            _then(200)
+        }
+
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
 function getCurrentDate(){
     let today = new Date();
     let date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
@@ -122,4 +203,4 @@ function getCurrentDate(){
     return date+' '+time;
 }
 
-module.exports = { userExist, createUser,getCurrentDate ,getUserOrder,updateUserOrderID,getPrivilege,removeOrderId};
+module.exports = { userExist, createUser,getCurrentDate ,getUserOrder,updateUserOrderID,getPrivilege,removeOrderId,getCodesFromDB, addPromotionCode};

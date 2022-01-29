@@ -1,7 +1,8 @@
 const pool = require("./database");
 
 
- let lastProductsState = {}
+let lastProductsState = {}
+let codesState = {}
 
 async function updateProductsFromDB(_then){
     let conn;
@@ -19,7 +20,26 @@ async function updateProductsFromDB(_then){
     }
 }
 
+async function updateCodesFromDB(_then){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("Fetching products")
+        let data = await conn.query("SELECT * FROM `codes`")
+        delete data['meta']
+        codesState = data;
+        _then(data)
+    } catch (err) {
+        return err;
+    }finally {
+        if (conn) return conn.end();
+    }
+}
 function getProducts(){
      return lastProductsState;
 }
-module.exports = { updateProductsFromDB, getProducts};
+
+function getCodes(){
+    return codesState;
+}
+module.exports = { updateProductsFromDB, getProducts,updateCodesFromDB,getCodes};

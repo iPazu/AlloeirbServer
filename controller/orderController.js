@@ -86,17 +86,11 @@ module.exports.cancelOrder = async (req,res) => {
             orderRequests.getOrder(order_id, (data) => {
                 if(data.user_id === req.user_id){ //Change this to allow admin and coursier
                     console.log("User match with order");
-                    if(data.status === "validation"){
                         orderRequests.changeStatus("canceled",order_id);
                         userRequests.updateUserOrderID(req.user_id);
                         console.log("Successfuly changed status");
 
                         res.sendStatus(400)
-                    }
-                    else {
-                        console.log("Status not valid");
-                        res.sendStatus(400);
-                    }
                 }else{
                     console.log("User doesn't match with order");
                     res.sendStatus(400);

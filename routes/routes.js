@@ -42,6 +42,7 @@ router.post("/order/ranking/:orderid",authenticateToken ,orderController.rankOrd
 
 router.post("/location/update" ,adminController.updateCoursierLocation);
 
+router.get("/user/code/:code", authenticateToken ,userController.addCode);
 
 
 router.get("/order/fetch",authenticateToken ,adminController.fetchOrders);
