@@ -11,9 +11,9 @@ async function createOrder(jsonOrder,user_id,_then){
         conn = await pool.getConnection();
         console.log("creating order");
         let id = makeid(16);
-        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [id,user_id, getTotal(jsonOrder.products),jsonOrder.adress,
-                jsonOrder.products
+                jsonOrder.products,jsonOrder.description
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
         await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
