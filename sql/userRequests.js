@@ -7,7 +7,7 @@ async function createUser(user_id){
     try {
         conn = await pool.getConnection();
         console.log("creating user");
-        let date = getCurrentDate();
+        let date = getCurrentDate() + 1000*60*60;
         const res = await conn.query("INSERT INTO users value (?,?,?,?,?,?)", [user_id,date,date,'undefined','','customer']);
         console.log(res);
         console.log("User successfully created");
@@ -199,7 +199,7 @@ async function addPromotionCode(code,user_id,_then){
 function getCurrentDate(){
     let today = new Date();
     let date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
-    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let time = parseInt(today.getHours() + "1" ) + ":" + today.getMinutes() + ":" + today.getSeconds();
     return date+' '+time;
 }
 

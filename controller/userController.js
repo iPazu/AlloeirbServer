@@ -13,6 +13,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     console.log(castoken);
     console.log(casticket);
     let user_id = await getCasUserID(castoken, casticket)
+    user_id='alaboirie'
     if(user_id === "aboin"){
         return
     }

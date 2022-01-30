@@ -26,7 +26,7 @@ async function mainTask(i){
 
         console.log("Successfully fetched codes");
     });
-    await sleep(1000*30);
+    await sleep(1000*60);
     await mainTask(i);
 }
 
