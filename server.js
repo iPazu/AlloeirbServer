@@ -50,6 +50,7 @@ app.use(session({
     resave: false
 }));
 app.use((req, res, next) => {
+    var origin = Request.Headers["Origin"];
     res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_HOST);
     res.setHeader("Access-Control-Allow-Credentials" ,'true');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

@@ -85,7 +85,7 @@ module.exports.addCode = (req,res) => {
     })
 }
 async function getCasUserID(token, ticket) {
-    const url = `https://cas.bordeaux-inp.fr/serviceValidate?service=https://alaboirie.vvv.enseirb-matmeca.fr/redirect?token=${token}&ticket=${ticket}`;
+    const url = `https://cas.bordeaux-inp.fr/serviceValidate?service=https://alaboirie.vvv.enseirb-matmeca.fr/redirectprod?token=${token}&ticket=${ticket}`;
     let data;
     await fetch(url)
         .then(response => response.text())
