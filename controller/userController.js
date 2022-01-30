@@ -112,7 +112,7 @@ module.exports.fetchProducts = async (req, res) => {
             userRequest.getCodesFromDB(req.user_id,(codes) => {
                 usercode = codes;
             }).then( () => {
-                products.map((p) => {
+                products.map((p,index) => {
                     if(p.code !== ''){
                         let have = false;
                         usercode.split(',').map((c) => {
@@ -123,7 +123,8 @@ module.exports.fetchProducts = async (req, res) => {
                         console.log(have)
                         if(!have){
                             console.log(p)
-                            products.pop(p)                    }
+                            products.splice(index, 1);
+                        }
                     }
                  })
                 res.send(JSON.stringify(products));
