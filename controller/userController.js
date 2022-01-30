@@ -116,17 +116,16 @@ module.exports.fetchProducts = async (req, res) => {
                     if(p.code !== ''){
                         let have = false;
                         usercode.split(',').map((c) => {
-                            console.log(c)
                             if(c === p.code){
                                 have = true;
                             }
                         })
                         console.log(have)
                         if(!have){
+                            console.log(p)
                             products.pop(p)                    }
                     }
                  })
-                console.log(products)
                 res.send(JSON.stringify(products));
 
 
