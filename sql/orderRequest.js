@@ -37,6 +37,7 @@ function makeid(length) {
     return result;
 }
 
+
 async function orderExist(order_id,_then){
     let conn;
     try {
@@ -111,6 +112,19 @@ async function changeStatus(status,order_id){
         conn = await pool.getConnection();
         console.log("make query")
         await conn.query("UPDATE `orders` SET `status`=? WHERE id=?", [status,order_id]);
+
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
+async function updateStock(productid,quantity){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("make query")
+        await conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [quantity,productid]);
 
     } catch (err) {
         throw err;

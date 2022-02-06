@@ -60,6 +60,9 @@ module.exports.acceptCommand = async (req,res) => {
                             console.log("User match with order");
                             if(data.status === "validation"){
                                 orderRequests.changeStatus("preparing",order_id);
+                                data.products.map((p) => {
+                                    console.log(p)
+                                })
                                 console.log("Successfuly changed status");
                                 res.sendStatus(200)
                             }
