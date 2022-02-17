@@ -1,6 +1,6 @@
 const pool = require("./database");
 const {getCodes} = require("../sql/productRequests");
-
+let whitelist
 
 async function createUser(user_id){
     let conn;
@@ -9,7 +9,6 @@ async function createUser(user_id){
         console.log("creating user");
         let date = getCurrentDate() + 1000*60*60;
         const res = await conn.query("INSERT INTO users value (?,?,?,?,?,?)", [user_id,date,date,'undefined','','customer']);
-        console.log(res);
         console.log("User successfully created");
     } catch (err) {
         throw err;
@@ -36,7 +35,6 @@ async function userExist(user_id,_then){
         else{
             const userdata = await conn.query("SELECT orderid,privilege,codes FROM `users` WHERE user_id=?", [user_id]);
             console.log("defined")
-            console.log(userdata)
             _then(true,userdata[0].orderid,userdata[0].privilege,userdata[0].codes);
         }
     } catch (err) {
@@ -202,5 +200,10 @@ function getCurrentDate(){
     let time = parseInt(today.getHours() + "1" ) + ":" + today.getMinutes() + ":" + today.getSeconds();
     return date+' '+time;
 }
-
-module.exports = { userExist, createUser,getCurrentDate ,getUserOrder,updateUserOrderID,getPrivilege,removeOrderId,getCodesFromDB, addPromotionCode};
+function getWhitelist(){
+    return whitelist
+}
+function setWhitelist(w){
+    whitelist = w;
+}
+module.exports = { userExist, createUser,getCurrentDate ,getUserOrder,updateUserOrderID,getPrivilege,removeOrderId,getCodesFromDB, addPromotionCode,setWhitelist,getWhitelist};

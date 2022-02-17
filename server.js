@@ -6,6 +6,8 @@ const authRoute = require('./routes/routes');
 const session = require('express-session')
 const productRequests = require('./sql/productRequests')
 const rateLimit = require("express-rate-limit");
+const fs = require('fs');
+let {setWhitelist} = require("./sql/userRequests");
 
 
 const limiter = rateLimit({
@@ -25,6 +27,7 @@ async function mainTask(i){
 
         console.log("Successfully fetched codes");
     });
+
     await sleep(1000*60);
     await mainTask(i);
 }
@@ -49,7 +52,7 @@ app.use(session({
     resave: false
 }));
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://www.alloeirb.fr');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
     res.setHeader("Access-Control-Allow-Credentials" ,'true');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
@@ -62,6 +65,7 @@ app.post('/pusher/auth', function(req, res) {
     var socketId = req.body.socket_id;
     var channel = req.body.channel_name;
     var auth = pusher.authenticate(socketId, channel);
+
     res.send(auth);
 });
 app.use(express.json());
@@ -72,6 +76,17 @@ app.use('/api',authRoute);
 
 app.listen(PORT, () => {
     console.log("Server started")
+    //
+    w = fs.readFileSync('listes-eleves.csv')
+        .toString() // convert Buffer to string
+        .split('\n') // split string to lines
+        .map(e => e.trim()) // remove white spaces for each line
+        .map(e => e.split(',').map(e => e.trim())); // split each line to array
+
+    setWhitelist(w)
     mainTask(0)
 });
+
+
+
 

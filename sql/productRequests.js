@@ -24,7 +24,6 @@ async function updateCodesFromDB(_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("Fetching products")
         let data = await conn.query("SELECT * FROM `codes`")
         delete data['meta']
         codesState = data;

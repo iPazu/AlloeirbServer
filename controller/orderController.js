@@ -75,6 +75,7 @@ module.exports.fetchOrder = async (req,res) => {
     })
 };
 
+module.exports
 module.exports.cancelOrder = async (req,res) => {
     let order_id = req.params.orderid;
     console.log("Canceling order");

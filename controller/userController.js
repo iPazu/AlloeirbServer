@@ -3,23 +3,32 @@ const userRequest = require('../sql/userRequests')
 const {getProducts, getCodes} = require("../sql/productRequests");
 const jwt = require("jsonwebtoken")
 const {order} = require("./orderController");
+const fs = require('fs');
+const {use} = require("express/lib/router");
+const csv = require('fast-csv');
+const {getWhitelist} = require("../sql/userRequests");
 
 
 module.exports.atemptAuthentification = async (req, res) => {
     console.log("auth")
-
     let castoken = req.params.token;
     let casticket = req.params.ticket;
+    let firstname;
     console.log(castoken);
     console.log(casticket);
     let user_id = await getCasUserID(castoken, casticket)
-    if(user_id === "aboin"){
-        return
-    }
+    user_id ='alaboirie';
+    getWhitelistInfo(user_id,(userinfo) => {
+        console.log(typeof userinfo)
+        let lastname =  String(userinfo).split(";")[0]
+        let firstname = String(userinfo).split(";")[1]
+        console.log(firstname)
+        console.log(lastname)
+        console.log("popoepoepeoep")
     const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
     //Initialise session
     let sess = req;
-    await userRequest.userExist(user_id, (exist,id,privilege,codes) => {
+     userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
             console.log("doesn't exist");
             userRequest.createUser(user_id)
@@ -37,14 +46,16 @@ module.exports.atemptAuthentification = async (req, res) => {
                 }
             })
         })
-        console.log({user_id,orderid,privilege,codeObject,accessToken})
-        res.send({user_id,orderid,privilege,codeObject,accessToken});
+         console.log("eeeeee")
+         console.log(firstname)
+        res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
     });
+    })
+
 };
 
 module.exports.fetchUserID = (req, res) => {
     const authHeader = req.headers['authorization']
-    console.log(req.headers)
     const token = authHeader && authHeader.split(' ')[1]
     console.log(token)
     if (token == null){
@@ -70,6 +81,7 @@ module.exports.addCode = (req,res) => {
         console.log(status)
         let codes = getCodes()
         let reduction = 0
+        codes.forEach()
         codes.map(c => {
             if(c.name === codetoadd){
                 reduction = c.reduction
@@ -140,3 +152,21 @@ module.exports.fetchProducts = async (req, res) => {
     }
 }
 
+function getWhitelistInfo(userid,_then){
+
+    const whitelisted = [['Emilie','Chapelle','echapelle']];
+    console.log("swoosh")
+    console.log(userid)
+    if(whitelisted.map(w => {
+        if(w.includes(userid)){
+            _then(w);
+        }
+    }))
+            getWhitelist().map((wl_user) => {
+
+                if(wl_user[0].includes(userid)){
+                    _then(wl_user[0])
+                }
+        })
+   _then(null)
+}
