@@ -23,6 +23,7 @@ async function checkPrivilege(req,_then){
 
 module.exports.updateCoursierLocation = async (req,res) => {
         console.log(res.body)
+    try {
         if(req.body.pos.key === "YfyguDreugUchcuHiv"){
             console.log("updating coursize location")
             console.log(req.body)
@@ -31,6 +32,10 @@ module.exports.updateCoursierLocation = async (req,res) => {
             console.log(coursierLocation)
             res.sendStatus(200)
         }
+    }catch (error){
+         console.log(error)
+    }
+
 
 }
 module.exports.fetchOrders = async (req,res) => {
