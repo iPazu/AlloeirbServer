@@ -12,7 +12,6 @@ const {getWhitelist} = require("../sql/userRequests");
 module.exports.atemptAuthentification = async (req, res) => {
     let castoken = req.params.token;
     let casticket = req.params.ticket;
-    let firstname;
     let user_id = await getCasUserID(castoken, casticket)
     getWhitelistInfo(user_id,(userinfo) => {
         let lastname =  String(userinfo).split(";")[0]
