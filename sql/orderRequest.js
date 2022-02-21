@@ -9,7 +9,6 @@ async function createOrder(jsonOrder,user_id,_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("creating order");
         let id = makeid(16);
         const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [id,user_id, getTotal(jsonOrder.products),jsonOrder.adress,
@@ -17,7 +16,6 @@ async function createOrder(jsonOrder,user_id,_then){
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
         await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
-        console.log(res);
         _then(id);
     } catch (err) {
         throw err;
@@ -42,16 +40,12 @@ async function orderExist(order_id,_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
-        console.log(order_id)
         const rows = await conn.query("SELECT COUNT(1) FROM `orders` WHERE id=?", [order_id]);
         let number = rows[0]["COUNT(1)"]
         if(number === 0){
-            console.log("order undefined")
             _then(false);
         }
         else{
-            console.log("order defined")
             _then(true);
         }
     } catch (err) {
@@ -64,10 +58,8 @@ async function getOrder(order_id,_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
         const rows = await conn.query("SELECT * FROM `orders` WHERE id=?", [order_id]);
         let data = rows[0]
-        console.log(data);
         _then(data);
     } catch (err) {
         throw err;
@@ -79,8 +71,6 @@ async function selectCoursier(user_id,order_id,_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query coursier")
-        console.log(order_id)
         await conn.query("UPDATE `orders` SET `status`='delivering' WHERE id=?", [order_id]);
         await conn.query("UPDATE `orders` SET `coursier`=? WHERE id=?", [user_id,order_id]);
     } catch (err) {
@@ -94,11 +84,9 @@ async function getAllAvaibleOrders(_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make queryy")
         const rows = await conn.query("SELECT * FROM `orders` WHERE status!='canceled' AND status!='delivered' ");
         let data = rows
         delete data['meta']
-        console.log(data);
         _then(data);
     } catch (err) {
         throw err;
@@ -110,7 +98,6 @@ async function changeStatus(status,order_id){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
         await conn.query("UPDATE `orders` SET `status`=? WHERE id=?", [status,order_id]);
 
     } catch (err) {
@@ -123,7 +110,6 @@ async function updateStock(productid,quantity){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
         await conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [quantity,productid]);
 
     } catch (err) {
@@ -136,27 +122,17 @@ async function setGeoPath(pos1,pos2,orderid){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
         fetchPath(pos1,pos2, (data) => {
-            console.log("got geopath")
-            console.log(data.features[0].geometry.coordinates)
-            console.log(data.features[0].properties.segments[0].duration)
-            console.log(data.features[0].properties.segments[0].distance)
             fs.readFile('paths.json', function readFileCallback(err, jsonData) {
                 if (err) {
-                    console.log(err);
                 } else {
-                    console.log("Writting in file")
                     let obj = JSON.parse(jsonData);
-                    console.log(obj)
                     obj[orderid] = data.features[0].geometry.coordinates
                     let json = JSON.stringify(obj);
-                    console.log(obj)
 
                     fs.writeFile('paths.json', json,function(err, result) {
                         if(err) console.log('error', err);
                     });
-                    console.log("File written")
 
                 }
             });
@@ -188,12 +164,9 @@ function fetchPath(pos1,pos2,_callback){
 
 function getCoordonatesFromString(string,_callback){
     location = string.replace(" ","%20")
-    console.log('get coordonates')
     uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${location}.json?country=FR&access_token=pk.eyJ1IjoianNjYXN0cm8iLCJhIjoiY2s2YzB6Z25kMDVhejNrbXNpcmtjNGtpbiJ9.28ynPf1Y5Q8EyB_moOHylw`
     axios.get(uri)
         .then((response) => {
-            console.log("coordonates gotten")
-            console.log(response.data.features[0].center)
             _callback(response.data.features[0].center)
         })
         .catch((error) => console.log(error.response));
@@ -202,7 +175,6 @@ async function setCoordonates(string,orderid){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("Setting coordonates")
         getCoordonatesFromString(string,(position) => {
              conn.query("UPDATE `orders` SET `latitude`=? WHERE id=?", [position[1],orderid]);
              conn.query("UPDATE `orders` SET `longitude`=? WHERE id=?", [position[0],orderid]);
@@ -217,7 +189,6 @@ async function setRanking(ranking,message,order_id){
     let conn;
     try {
         conn = await pool.getConnection();
-        console.log("make query")
         await conn.query("UPDATE `orders` SET `ranking`=? WHERE id=?", [ranking,order_id]);
         await conn.query("UPDATE `orders` SET `message`=? WHERE id=?", [message,order_id]);
 
