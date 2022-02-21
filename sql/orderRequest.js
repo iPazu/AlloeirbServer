@@ -84,7 +84,7 @@ async function getAllAvaibleOrders(_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM `orders` WHERE status!='canceled' AND status!='delivered' ");
+        const rows = await conn.query("SELECT * FROM `orders` WHERE status!='canceled' AND status!='delivered' AND status!='ranking'");
         let data = rows
         delete data['meta']
         _then(data);
