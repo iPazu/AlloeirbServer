@@ -166,11 +166,15 @@ function getWhitelistInfo(userid,_then){
         for (let i = 0; i < wl.length; i++) {
             let wl_user = wl[i]
             if(wl_user[0].includes(userid)){
+                console.log(wl_user[0])
                 _then(wl_user[0])
                 break
             }
         }
-    if(!returned)
-    _then(null)
+    if(!returned){
+        console.log("shouldn't be there")
+        _then(null)
+
+    }
     }
 }
