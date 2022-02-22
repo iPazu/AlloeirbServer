@@ -17,9 +17,9 @@ module.exports.atemptAuthentification = async (req, res) => {
     getWhitelistInfo(user_id,(userinfo) => {
         let lastname =  String(userinfo).split(";")[0]
         let firstname = String(userinfo).split(";")[1]
-    const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
-    //Initialise session
-    let sess = req;
+        const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
+        //Initialise session
+        let sess = req;
      userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
             console.log("Creating user")
@@ -167,6 +167,7 @@ function getWhitelistInfo(userid,_then){
             let wl_user = wl[i]
             if(wl_user[0].includes(userid)){
                 console.log(wl_user[0])
+                returned = true;
                 _then(wl_user[0])
                 break
             }
