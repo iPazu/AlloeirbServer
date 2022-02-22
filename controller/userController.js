@@ -26,8 +26,10 @@ module.exports.atemptAuthentification = async (req, res) => {
                 nextStep()
             })
         }
+        else{
+            nextStep()
+        }
 
-        nextStep()
 
         function nextStep(){
             sess.user_id = user_id;
