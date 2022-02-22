@@ -106,11 +106,14 @@ async function changeStatus(status,order_id){
         if (conn) return conn.end();
     }
 }
-async function updateStock(productid,quantity){
+async function updateStock(productdata){
     let conn;
     try {
+        console.log("updating stock")
         conn = await pool.getConnection();
-        await conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [quantity,productid]);
+        productdata.map((p)=> {
+             conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [p.amount,p.id]);
+        })
 
     } catch (err) {
         throw err;

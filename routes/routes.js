@@ -7,7 +7,6 @@ const userController = require('../controller/userController');
 const adminController = require('../controller/adminController');
 
 function authenticateToken(req, res, next) {
-    console.log("checking for token")
 
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
@@ -15,7 +14,6 @@ function authenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401)
 
     jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
-        console.log(err)
         if (err) return res.sendStatus(403)
         req.user_id = user
         next()

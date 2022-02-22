@@ -60,6 +60,7 @@ module.exports.acceptCommand = async (req,res) => {
                             if(data.status === "validation"){
                                 orderRequests.changeStatus("preparing",order_id);
                                 orderRequests.getOrder(order_id,(data) => {
+                                    console.log(data)
                                     orderRequests.updateStock(data.products)
                                 })
                                 res.sendStatus(200)
