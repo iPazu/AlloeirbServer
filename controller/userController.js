@@ -10,6 +10,7 @@ const {getWhitelist} = require("../sql/userRequests");
 
 
 module.exports.atemptAuthentification = async (req, res) => {
+    console.log("user auth")
     let castoken = req.params.token;
     let casticket = req.params.ticket;
     let user_id = await getCasUserID(castoken, casticket)
