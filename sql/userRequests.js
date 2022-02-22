@@ -25,11 +25,14 @@ async function userExist(user_id,_then){
         await conn.query("UPDATE users SET user_lastconnection = ? WHERE user_id= ?", [getCurrentDate(),user_id]);
         await updateUserOrderID(user_id);
         if(number === 0){
+            console.log("then1")
             _then(false,'undefined');
         }
         else{
             const userdata = await conn.query("SELECT orderid,privilege,codes FROM `users` WHERE user_id=?", [user_id]);
+            console.log("then2")
             _then(true,userdata[0].orderid,userdata[0].privilege,userdata[0].codes);
+
         }
     } catch (err) {
         throw err;
