@@ -112,7 +112,7 @@ async function updateStock(productdata){
         console.log("updating stock")
         console.log(productdata)
         conn = await pool.getConnection();
-        JSON.parse(productdata).map((p)=> {
+        productdata.split(",").map((p)=> {
             console.log(p)
              conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [p.amount,p.id]);
         })
