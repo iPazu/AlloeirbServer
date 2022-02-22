@@ -9,6 +9,13 @@ const rateLimit = require("express-rate-limit");
 const fs = require('fs');
 let {setWhitelist} = require("./sql/userRequests");
 
+const { Appsignal } = require("@appsignal/nodejs");
+
+const appsignal = new Appsignal({
+    active: true,
+    name: "Alloeirb",
+    pushApiKey: "bec39a80-4710-4704-91df-7a103077de84\n" // Note: renamed from `apiKey` in version 2.2.5
+});
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
