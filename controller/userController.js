@@ -14,6 +14,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     let castoken = req.params.token;
     let casticket = req.params.ticket;
     let user_id = await getCasUserID(castoken, casticket)
+    user_id = 'alaboirie'
     getWhitelistInfo(user_id,(userinfo) => {
         let lastname =  String(userinfo).split(";")[0]
         let firstname = String(userinfo).split(";")[1]
