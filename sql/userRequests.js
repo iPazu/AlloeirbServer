@@ -7,7 +7,8 @@ async function createUser(user_id){
     try {
         conn = await pool.getConnection();
         let date = getCurrentDate() + 1000*60*60;
-        const res = await conn.query("INSERT INTO users value (?,?,?,?,?,?)", [user_id,date,date,'undefined','','customer']);
+        console.log("in database")
+        await conn.query("INSERT INTO users value (?,?,?,?,?,?)", [user_id,date,date,'undefined','','customer']);
     } catch (err) {
         throw err;
     } finally {
