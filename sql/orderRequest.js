@@ -115,11 +115,12 @@ async function updateStock(productdata){
         productdata.split(",").map((p)=> {
             p = p.replace("{","")
             p = p.replace("}","")
-            p = p.replace('"',"")
+            p = p.replaceAll('"',"")
             p = p.split(":")
             let id = p[0]
             let quantity = p[1]
-            console.log(p)
+            console.log(id)
+            console.log(quantity)
              conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [quantity,id]);
         })
 
