@@ -25,24 +25,11 @@ module.exports.atemptAuthentification = async (req, res) => {
             console.log("Creating user")
             userRequest.createUser(user_id).then(()=> {
                 console.log("USER CREATED " + user_id)
-                sess.user_id = user_id;
-                let orderid = id;
-                let  codeObject = {}
-                let allCodes = getCodes()
-                console.log(codes !== '')
-                if(codes !== null){
-                    codes.split(",").map(c => {
-                        allCodes.map(ac => {
-                            if(ac.name === c){
-                                codeObject[c] = ac.reduction
-                            }
-                        })
-                    })
-                }
-                res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
+                nextStep()
             })
         }
-        else{
+        nextStep()
+        function nextStep(){
             sess.user_id = user_id;
             let orderid = id;
             let  codeObject = {}
@@ -55,7 +42,7 @@ module.exports.atemptAuthentification = async (req, res) => {
                         }
                     })
                 })
-            }
+        }
             res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
         }
 
