@@ -26,7 +26,9 @@ module.exports.updateCoursierLocation = async (req,res) => {
             console.log("updating coursize location")
             console.log(req.body)
             let position = req.body.pos
-            coursierLocation[position.id] = {latitude: position.latitude,longitude: position.longitude}
+            let id = position.id.replaceAll('"',"")
+            id = id.replaceAll("'","")
+            coursierLocation[id] = {latitude: position.latitude,longitude: position.longitude}
             console.log(coursierLocation)
             res.sendStatus(200)
         }
