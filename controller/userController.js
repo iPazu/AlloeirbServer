@@ -21,20 +21,29 @@ module.exports.atemptAuthentification = async (req, res) => {
     let sess = req;
      userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
-            userRequest.createUser(user_id)
-        }
-        sess.user_id = user_id;
-        let orderid = id;
-        let  codeObject = {}
-        let allCodes = getCodes()
-        codes.split(",").map(c => {
-            allCodes.map(ac => {
-                if(ac.name === c){
-                    codeObject[c] = ac.reduction
-                }
+            userRequest.createUser(user_id).then(()=> {
+                console.log("USER CREATED " + user_id)
+                nextStep()
             })
-        })
-        res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
+        }
+
+        nextStep()
+
+        function nextStep(){
+            sess.user_id = user_id;
+            let orderid = id;
+            let  codeObject = {}
+            let allCodes = getCodes()
+            codes.split(",").map(c => {
+                allCodes.map(ac => {
+                    if(ac.name === c){
+                        codeObject[c] = ac.reduction
+                    }
+                })
+            })
+            res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
+        }
+
     });
     })
 
