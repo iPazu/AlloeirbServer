@@ -110,6 +110,7 @@ async function updateStock(productdata){
     let conn;
     try {
         console.log("updating stock")
+        console.log(productdata)
         conn = await pool.getConnection();
         productdata.map((p)=> {
             console.log(p)
