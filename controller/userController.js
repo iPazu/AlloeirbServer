@@ -29,13 +29,16 @@ module.exports.atemptAuthentification = async (req, res) => {
                 let orderid = id;
                 let  codeObject = {}
                 let allCodes = getCodes()
-                codes.split(",").map(c => {
-                    allCodes.map(ac => {
-                        if(ac.name === c){
-                            codeObject[c] = ac.reduction
-                        }
+                console.log(codes !== null)
+                if(codes !== null){
+                    codes.split(",").map(c => {
+                        allCodes.map(ac => {
+                            if(ac.name === c){
+                                codeObject[c] = ac.reduction
+                            }
+                        })
                     })
-                })
+                }
                 res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
             })
         }
@@ -44,13 +47,15 @@ module.exports.atemptAuthentification = async (req, res) => {
             let orderid = id;
             let  codeObject = {}
             let allCodes = getCodes()
-            codes.split(",").map(c => {
-                allCodes.map(ac => {
-                    if(ac.name === c){
-                        codeObject[c] = ac.reduction
-                    }
+            if(codes !== null){
+                codes.split(",").map(c => {
+                    allCodes.map(ac => {
+                        if(ac.name === c){
+                            codeObject[c] = ac.reduction
+                        }
+                    })
                 })
-            })
+            }
             res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
         }
 
