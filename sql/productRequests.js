@@ -9,7 +9,7 @@ async function updateProductsFromDB(_then){
     try {
         conn = await pool.getConnection();
         console.log("Fetching products")
-        let data = await conn.query("SELECT * FROM `products` WHERE disponible=1 AND stock!=0")
+        let data = await conn.query("SELECT * FROM `products` WHERE disponible=1 AND stock>0")
         delete data['meta']
         lastProductsState = data;
         _then(data)
