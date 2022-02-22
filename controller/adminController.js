@@ -1,6 +1,7 @@
 
 const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
+const {order} = require("./orderController");
 
 let coursierLocation = {alaboirie: {latitude:43.66199693275686, longitude:1.480274969014603}}
 
@@ -58,7 +59,9 @@ module.exports.acceptCommand = async (req,res) => {
                     orderRequests.getOrder(order_id, (data) => {
                             if(data.status === "validation"){
                                 orderRequests.changeStatus("preparing",order_id);
-
+                                orderRequests.getOrder(order_id,(data) => {
+                                    orderRequests.updateStock(data.products)
+                                })
                                 res.sendStatus(200)
                             }
                             else {

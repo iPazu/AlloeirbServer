@@ -92,6 +92,19 @@ async function removeOrderId(user_id){
         if (conn) return conn.end();
     }
 }
+async function updateStock(products){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        products.map((p) => {
+             conn.query("UPDATE `products` SET stock=stock-? WHERE id=?", [p.amount,p.id]);
+        })
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
 async function updateUserOrderID(user_id,_then){
     let conn;
     try {
