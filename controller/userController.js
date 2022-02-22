@@ -21,6 +21,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     let sess = req;
      userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
+            console.log("Creating user")
             userRequest.createUser(user_id).then(()=> {
                 console.log("USER CREATED " + user_id)
                 sess.user_id = user_id;
