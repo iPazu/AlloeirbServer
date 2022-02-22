@@ -18,6 +18,7 @@ async function createUser(user_id){
 
 async function userExist(user_id,_then){
     let conn;
+    console.log("user exist")
     try {
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT COUNT(1) FROM `users` WHERE user_id=?", [user_id]);
