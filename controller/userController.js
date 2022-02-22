@@ -154,16 +154,23 @@ module.exports.fetchProducts = async (req, res) => {
 function getWhitelistInfo(userid,_then){
 
     const whitelisted = [['Emilie','Chapelle','echapelle']];
-    if(whitelisted.map(w => {
+    let returned = false
+    whitelisted.map(w => {
         if(w.includes(userid)){
+            returned = true;
             _then(w);
         }
-    }))
-            getWhitelist().map((wl_user) => {
-
-                if(wl_user[0].includes(userid)){
-                    _then(wl_user[0])
-                }
-        })
-   _then(null)
+    })
+    if(!returned){
+        let wl = getWhitelist()
+        for (let i = 0; i < wl.length; i++) {
+            let wl_user = wl[i]
+            if(wl_user[0].includes(userid)){
+                _then(wl_user[0])
+                break
+            }
+        }
+    if(!returned)
+    _then(null)
+    }
 }
