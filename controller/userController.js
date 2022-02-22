@@ -34,9 +34,7 @@ module.exports.atemptAuthentification = async (req, res) => {
             let orderid = id;
             let  codeObject = {}
             let allCodes = getCodes()
-            console.log(codes)
-            console.log(typeof codes)
-            if(codes !== null){
+            if(codes !== undefined){
                 codes.split(",").map(c => {
                     allCodes.map(ac => {
                         if(ac.name === c){
