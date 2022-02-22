@@ -113,8 +113,14 @@ async function updateStock(productdata){
         console.log(productdata)
         conn = await pool.getConnection();
         productdata.split(",").map((p)=> {
+            p = p.replace("{","")
+            p = p.replace("}","")
+            p = p.replace('"',"")
+            p = p.split(":")
+            let id = p[0]
+            let quantity = p[1]
             console.log(p)
-             conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [p.amount,p.id]);
+             conn.query("UPDATE `products` SET stock= stock - ? WHERE id=?", [quantity,id]);
         })
 
     } catch (err) {
