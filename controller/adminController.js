@@ -87,18 +87,25 @@ module.exports.acceptCoursier = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
         if(privilege){
             if(coursierLocation[req.user_id] === undefined){
+                console.log(req.user_id)
+                console.log("wrong status")
                 res.sendStatus(407)
                 return;
             }
             let order_id = req.params.orderid;
             orderRequests.orderExist(order_id, (exist) => {
+                console.log("order exist")
                 if (exist) {
                     orderRequests.getOrder(order_id, (data) => {
-                            if(data.status === "preparing"){
-                                orderRequests.selectCoursier(req.user_id,order_id);
+                        console.log("order fetched")
+                        if(data.status === "preparing"){
+                            console.log("order taken")
+                            orderRequests.selectCoursier(req.user_id,order_id);
                                 let deliverypos = {longitude: data.longitude, latitude: data.latitude}
                                 orderRequests.setGeoPath(deliverypos,coursierLocation[req.user_id],data.id)
-                                res.sendStatus(200)
+                                console.log("coursier taken")
+
+                            res.sendStatus(200)
                             }
                             else {
                                 res.sendStatus(400);
