@@ -88,6 +88,7 @@ module.exports.addCode = (req,res) => {
             codeObj[codetoadd]  = reduction
             res.json(codeObj)
         }
+        console.log("sending status"+status)
         res.sendStatus(status)
     })
 }
