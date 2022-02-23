@@ -74,6 +74,7 @@ module.exports.fetchUserID = (req, res) => {
 module.exports.addCode = (req,res) => {
     let codetoadd = req.params.code
     userRequest.addPromotionCode(codetoadd,req.user_id, (status) => {
+        console.log(status)
         let codes = getCodes()
         let reduction = 0
         codes.forEach()
