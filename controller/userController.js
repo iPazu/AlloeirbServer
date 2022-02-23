@@ -75,9 +75,10 @@ module.exports.addCode = (req,res) => {
     let codetoadd = req.params.code
     userRequest.addPromotionCode(codetoadd,req.user_id, (status) => {
         console.log(status)
+        console.log("holla")
         let codes = getCodes()
+        console.log("chico")
         let reduction = 0
-        codes.forEach()
         console.log("fetched codes")
         codes.map(c => {
             if(c.name === codetoadd){
