@@ -78,12 +78,16 @@ module.exports.addCode = (req,res) => {
         let codes = getCodes()
         let reduction = 0
         codes.forEach()
+        console.log("fetched codes")
         codes.map(c => {
             if(c.name === codetoadd){
                 reduction = c.reduction
             }
         })
+        console.log("mapped them")
+        console.log("sending status"+status)
         if(status === 200){
+            console.log("it's good sending positive feedback")
             let codeObj = {}
             codeObj[codetoadd]  = reduction
             res.json(codeObj)
