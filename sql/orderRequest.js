@@ -116,6 +116,8 @@ async function updateStock(productdata){
             p = p.replace("{","")
             p = p.replace("}","")
             p = p.replaceAll('"',"")
+            p = p.replaceAll("'","")
+            p = p.replaceAll(" ","")
             p = p.split(":")
             let id = p[0]
             let quantity = p[1]
