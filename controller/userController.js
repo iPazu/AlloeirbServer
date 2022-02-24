@@ -16,7 +16,10 @@ module.exports.atemptAuthentification = async (req, res) => {
     let user_id = await getCasUserID(castoken, casticket)
 
     getWhitelistInfo(user_id,(userinfo) => {
-        console.log(userinfo)
+        if(userinfo === null){
+            res.sendStatus(706)
+            return
+        }
         let lastname =  String(userinfo).split(";")[0]
         let firstname = String(userinfo).split(";")[1]
         const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
