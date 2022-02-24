@@ -2,7 +2,7 @@ const pool = require("./database");
 const {getCurrentDate} = require("./userRequests");
 const axios = require("axios");
 const fs = require('fs');
-const {getProducts} = require("./productRequests");
+const {getProducts, setRunningOrderNumber, getRunningOrderNumber} = require("./productRequests");
 
 
 async function createOrder(jsonOrder,user_id,_then){
@@ -16,6 +16,7 @@ async function createOrder(jsonOrder,user_id,_then){
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
         await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
+        setRunningOrderNumber(getRunningOrderNumber()+1)
         _then(id);
     } catch (err) {
         throw err;
@@ -98,7 +99,7 @@ async function getRunningOrder(_then){
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT COUNT(1) FROM `orders` WHERE status='delivering' OR status='validating' OR status='preparing'");
+        const rows = await conn.query("SELECT COUNT(1) FROM `orders` WHERE status='delivering' OR status='validation' OR status='preparing'");
         let number = rows[0]["COUNT(1)"]
         _then(number);
     } catch (err) {
