@@ -24,17 +24,22 @@ module.exports.atemptAuthentification = async (req, res) => {
      userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
             userRequest.createUser(user_id).then(()=> {
+                if(userinfo === null){
+                    res.sendStatus(706)
+                    return
+                }
                 nextStep()
             })
         }
         else{
-            nextStep()
-        }
-        function nextStep(){
             if(userinfo === null){
                 res.sendStatus(706)
                 return
             }
+            nextStep()
+        }
+        function nextStep(){
+
             sess.user_id = user_id;
             let orderid = id;
             let  codeObject = {}
