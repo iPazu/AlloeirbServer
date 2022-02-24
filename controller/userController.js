@@ -15,10 +15,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     let user_id = await getCasUserID(castoken, casticket)
 
     getWhitelistInfo(user_id,(userinfo) => {
-        if(userinfo === null){
-            res.sendStatus(706)
-            return
-        }
+
         let lastname =  String(userinfo).split(";")[0]
         let firstname = String(userinfo).split(";")[1]
         const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
@@ -34,6 +31,10 @@ module.exports.atemptAuthentification = async (req, res) => {
             nextStep()
         }
         function nextStep(){
+            if(userinfo === null){
+                res.sendStatus(706)
+                return
+            }
             sess.user_id = user_id;
             let orderid = id;
             let  codeObject = {}
@@ -143,15 +144,7 @@ module.exports.fetchProducts = async (req, res) => {
 
 function getWhitelistInfo(userid,_then){
 
-    const whitelisted = [['Emilie','Chapelle','echapelle']];
     let returned = false
-    whitelisted.map(w => {
-        if(w.includes(userid)){
-            returned = true;
-            _then(w);
-        }
-    })
-    if(!returned){
         let wl = getWhitelist()
         for (let i = 0; i < wl.length; i++) {
             let wl_user = wl[i]
@@ -160,7 +153,6 @@ function getWhitelistInfo(userid,_then){
                 _then(wl_user[0])
                 break
             }
-        }
     if(!returned){
         console.log("shouldn't be there")
         _then(null)
