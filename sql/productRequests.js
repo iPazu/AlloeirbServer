@@ -3,6 +3,7 @@ const pool = require("./database");
 
 let lastProductsState = {}
 let codesState = {}
+let runningOrders = 0;
 
 async function updateProductsFromDB(_then){
     let conn;
@@ -41,4 +42,10 @@ function getProducts(){
 function getCodes(){
     return codesState;
 }
-module.exports = { updateProductsFromDB, getProducts,updateCodesFromDB,getCodes};
+function getRunningOrderNumber(){
+    return runningOrders
+}
+function setRunningOrderNumber(n){
+     runningOrders = n
+}
+module.exports = { updateProductsFromDB, getProducts,updateCodesFromDB,getCodes,getRunningOrderNumber,setRunningOrderNumber};

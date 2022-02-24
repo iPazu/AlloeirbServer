@@ -10,6 +10,8 @@ const fs = require('fs');
 let {setWhitelist} = require("./sql/userRequests");
 
 const { Appsignal } = require("@appsignal/nodejs");
+const {getRunningOrder} = require("./sql/orderRequest");
+const {setRunningOrderNumber} = require("./sql/productRequests");
 
 const appsignal = new Appsignal({
     active: true,
@@ -89,8 +91,12 @@ app.listen(PORT, () => {
         .split('\n') // split string to lines
         .map(e => e.trim()) // remove white spaces for each line
         .map(e => e.split(',').map(e => e.trim())); // split each line to array
-
     setWhitelist(w)
+
+    let n = getRunningOrder()
+    setRunningOrderNumber(n)
+    console.log(n+" running orders")
+
     mainTask(0)
 });
 

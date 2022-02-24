@@ -94,6 +94,19 @@ async function getAllAvaibleOrders(_then){
         if (conn) return conn.end();
     }
 }
+async function getRunningOrder(_then){
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT COUNT(1) FROM `orders` WHERE status='delivering' OR status='validating' OR status='preparing'");
+        let number = rows[0]["COUNT(1)"]
+        _then(number);
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) return conn.end();
+    }
+}
 async function changeStatus(status,order_id){
     let conn;
     try {
@@ -226,4 +239,4 @@ function getTotal(jsonObject){
 
 }
 
-module.exports = { createOrder,orderExist ,getTotal, getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath,setGeoPath,updateStock};
+module.exports = { createOrder,orderExist ,getTotal, getRunningOrder,getOrder,changeStatus,getAllAvaibleOrders,selectCoursier,setRanking,fetchPath,setGeoPath,updateStock};
