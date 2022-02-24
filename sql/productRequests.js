@@ -4,7 +4,6 @@ const pool = require("./database");
 let lastProductsState = {}
 let codesState = {}
 let runningOrders = 0;
-let MAX_ORDERS = 0
 
 async function updateProductsFromDB(_then){
     let conn;
@@ -50,6 +49,6 @@ function setRunningOrderNumber(n){
      runningOrders = n
 }
 function getMaxOrders(){
-    return MAX_ORDERS
+    return process.env.MAX_ORDERS
 }
 module.exports = { updateProductsFromDB, getProducts,updateCodesFromDB,getCodes,getRunningOrderNumber,setRunningOrderNumber,getMaxOrders};
