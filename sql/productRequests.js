@@ -4,7 +4,7 @@ const pool = require("./database");
 let lastProductsState = {}
 let codesState = {}
 let runningOrders = 0;
-let MAX_ORDERS = 15
+let MAX_ORDERS = 0
 
 async function updateProductsFromDB(_then){
     let conn;
