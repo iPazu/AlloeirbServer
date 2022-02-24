@@ -93,9 +93,10 @@ app.listen(PORT, () => {
         .map(e => e.split(',').map(e => e.trim())); // split each line to array
     setWhitelist(w)
 
-    let n = getRunningOrder()
-    setRunningOrderNumber(n)
-    console.log(n+" running orders")
+    let n = getRunningOrder((n)=>{
+        setRunningOrderNumber(n)
+        console.log(n+" running orders")
+    })
 
     mainTask(0)
 });
