@@ -10,7 +10,7 @@ async function createOrder(jsonOrder,user_id,_then){
     try {
         conn = await pool.getConnection();
         let id = makeid(16);
-        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,??,?,?,?,?,?,?,?,?,?,?,?,?)",
+        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products),jsonOrder.adress,
                 jsonOrder.products,jsonOrder.description
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
