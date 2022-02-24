@@ -10,7 +10,6 @@ const {getWhitelist} = require("../sql/userRequests");
 
 
 module.exports.atemptAuthentification = async (req, res) => {
-    console.log("user auth")
     let castoken = req.params.token;
     let casticket = req.params.ticket;
     let user_id = await getCasUserID(castoken, casticket)
@@ -27,9 +26,7 @@ module.exports.atemptAuthentification = async (req, res) => {
         let sess = req;
      userRequest.userExist(user_id, (exist,id,privilege,codes) => {
         if (!exist) {
-            console.log("Creating user")
             userRequest.createUser(user_id).then(()=> {
-                console.log("USER CREATED " + user_id)
                 nextStep()
             })
         }
@@ -78,26 +75,18 @@ module.exports.fetchUserID = (req, res) => {
 module.exports.addCode = (req,res) => {
     let codetoadd = req.params.code
     userRequest.addPromotionCode(codetoadd,req.user_id, (status) => {
-        console.log(status)
-        console.log("holla")
         let codes = getCodes()
-        console.log("chico")
         let reduction = 0
-        console.log("fetched codes")
         codes.map(c => {
             if(c.name === codetoadd){
                 reduction = c.reduction
             }
         })
-        console.log("mapped them")
-        console.log("sending status"+status)
         if(status === 200){
-            console.log("it's good sending positive feedback")
             let codeObj = {}
             codeObj[codetoadd]  = reduction
             res.json(codeObj)
         }
-        console.log("sending status"+status)
         res.sendStatus(status)
     })
 }
