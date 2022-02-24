@@ -26,17 +26,19 @@ module.exports.atemptAuthentification = async (req, res) => {
             userRequest.createUser(user_id).then(()=> {
                 if(userinfo === null){
                     res.sendStatus(706)
-                    return
                 }
-                nextStep()
+                else
+                    nextStep()
             })
         }
         else{
             if(userinfo === null){
                 res.sendStatus(706)
-                return
+
             }
-            nextStep()
+            else{
+                nextStep()
+            }
         }
         function nextStep(){
 
@@ -158,9 +160,10 @@ function getWhitelistInfo(userid,_then){
                 _then(wl_user[0])
                 break
             }
+        }
+
     if(!returned){
         console.log("shouldn't be there")
         _then(null)
-    }
     }
 }
