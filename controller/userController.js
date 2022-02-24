@@ -55,7 +55,7 @@ module.exports.atemptAuthentification = async (req, res) => {
                     })
                 })
         }
-            res.send({user_id,firstname,orderid,privilege,codeObject,accessToken});
+            res.send({user_id,firstname,lastname,orderid,privilege,codeObject,accessToken});
         }
 
     });
