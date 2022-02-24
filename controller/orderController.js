@@ -3,6 +3,7 @@ const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const {getCoursierLocation} = require("./adminController");
 const fs = require('fs');
+const {getMaxOrders, getRunningOrderNumber} = require("../sql/productRequests");
 
 
 
@@ -13,12 +14,15 @@ module.exports.order = async (req,res) => {
             if(exist){
                 getUserOrder(req.user_id,(orderid) => {
                     if(orderid === 'undefined'){
+                        if(getRunningOrderNumber() >= getMaxOrders()){
+                            res.sendStatus(509);
+                        }
                         orderRequests.createOrder(req.body,req.user_id,(id) =>{
                             res.send(id);
                             res.sendStatus(200);
                         })
                     }else{
-                        res.sendStatus(400);
+                        res.sendStatus(609);
                     }
                 })
 
