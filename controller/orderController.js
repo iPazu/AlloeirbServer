@@ -16,6 +16,7 @@ module.exports.order = async (req,res) => {
                     if(orderid === 'undefined'){
                         if(getRunningOrderNumber() >= getMaxOrders()){
                             res.sendStatus(509);
+                            return
                         }
                         orderRequests.createOrder(req.body,req.user_id,(id) =>{
                             res.send(id);
