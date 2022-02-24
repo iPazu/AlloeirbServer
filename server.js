@@ -20,7 +20,7 @@ const appsignal = new Appsignal({
 });
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 5 * 60 * 1000, // 5 minutes
     max: 500 // limit each IP to 100 requests per windowMs
 });
 

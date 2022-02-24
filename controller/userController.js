@@ -16,6 +16,7 @@ module.exports.atemptAuthentification = async (req, res) => {
     let user_id = await getCasUserID(castoken, casticket)
 
     getWhitelistInfo(user_id,(userinfo) => {
+        console.log(userinfo)
         let lastname =  String(userinfo).split(";")[0]
         let firstname = String(userinfo).split(";")[1]
         const accessToken = jwt.sign(user_id,process.env.SECRET_TOKEN)
@@ -172,7 +173,6 @@ function getWhitelistInfo(userid,_then){
     if(!returned){
         console.log("shouldn't be there")
         _then(null)
-
     }
     }
 }

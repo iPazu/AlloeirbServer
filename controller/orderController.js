@@ -3,7 +3,7 @@ const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const {getCoursierLocation} = require("./adminController");
 const fs = require('fs');
-const {getMaxOrders, getRunningOrderNumber} = require("../sql/productRequests");
+const {getMaxOrders, getRunningOrderNumber, setRunningOrderNumber} = require("../sql/productRequests");
 
 
 
@@ -74,9 +74,10 @@ module.exports.cancelOrder = async (req,res) => {
             orderRequests.getOrder(order_id, (data) => {
                 if(data.user_id === req.user_id){ //Change this to allow admin and coursier
                         orderRequests.changeStatus("canceled",order_id);
-                        userRequests.updateUserOrderID(req.user_id);
 
-                        res.sendStatus(400)
+                        userRequests.updateUserOrderID(req.user_id);
+                        setRunningOrderNumber(getRunningOrderNumber()-1)
+                        res.sendStatus(200)
                 }else{
                     res.sendStatus(400);
                 }
