@@ -10,14 +10,19 @@ async function createOrder(jsonOrder,user_id,_then){
     try {
         conn = await pool.getConnection();
         let id = makeid(16);
-        const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products,user_id),jsonOrder.adress,
-                jsonOrder.products,jsonOrder.description
-                ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
-        await setCoordonates(jsonOrder.adress,id);
-        await conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
-        setRunningOrderNumber(getRunningOrderNumber()+1)
-        _then(id);
+        getTotal().then(total=> {
+            console.log("from func")
+            console.log(total)
+            const res =  conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products,user_id),jsonOrder.adress,
+                    jsonOrder.products,jsonOrder.description
+                    ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
+             setCoordonates(jsonOrder.adress,id);
+             conn.query("UPDATE users SET orderid = ? WHERE user_id= ?", [id,user_id]);
+            setRunningOrderNumber(getRunningOrderNumber()+1)
+            _then(id);
+        })
+
     } catch (err) {
         throw err;
     } finally {
@@ -225,7 +230,7 @@ async function setRanking(ranking,message,order_id){
     }
 }
 //need to be done
-function getTotal(jsonObject,user_id){
+async function getTotal(jsonObject,user_id){
     let products  = getProducts()
     let total = 0.0;
     for(productid in jsonObject){
