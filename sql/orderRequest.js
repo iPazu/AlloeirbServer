@@ -236,7 +236,7 @@ function getTotal(jsonObject){
         }
     }
     console.log(total)
-    return total
+    return Math.round(total*100)/100
 
 }
 
