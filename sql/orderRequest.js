@@ -262,12 +262,7 @@ async function getTotal(jsonObject,user_id,_then){
 
         console.log(reduction)
         console.log(total)
-        if(reduction>0){
-            _then(total*(reduction/100))
-        }
-        else{
-            _then(total)
-        }
+        _then(total + total*(reduction/100))
     })
 
 
