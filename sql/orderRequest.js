@@ -243,14 +243,17 @@ async function getTotal(jsonObject,user_id,_then){
     console.log("fetching codes")
     let reduction = 0
     getCodesFromDB(user_id,(codes) => {
-        console.log(codes)
         let codeData = getCodes()
-        console.log(getCodes())
         codes.map((c)=>{
             codeData.map((cd)=>{
+                console.log(c)
+                console.log(cd)
+                console.log("-----")
                 if(cd.name === c){
-                    if(reduction < cd.reduction)
+                    if(reduction < cd.reduction){
                         reduction = cd.reduction
+                        console.log(reduction)
+                    }
                 }
 
             })
