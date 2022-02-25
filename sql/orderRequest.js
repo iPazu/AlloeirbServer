@@ -2,7 +2,7 @@ const pool = require("./database");
 const {getCurrentDate, getCodesFromDB} = require("./userRequests");
 const axios = require("axios");
 const fs = require('fs');
-const {getProducts, setRunningOrderNumber, getRunningOrderNumber} = require("./productRequests");
+const {getProducts, setRunningOrderNumber, getRunningOrderNumber, getCodes} = require("./productRequests");
 
 
 async function createOrder(jsonOrder,user_id,_then){
@@ -238,8 +238,10 @@ function getTotal(jsonObject,user_id){
     console.log("fetching codes")
     getCodesFromDB(user_id,(codes) => {
         console.log(codes)
+        let codeData = getCodes()
+        console.log(getCodes())
         codes.map((c)=>{
-            console.log(c)
+            codeData[c].reduction
         })
     })
     console.log(total)
