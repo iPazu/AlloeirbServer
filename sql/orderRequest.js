@@ -236,16 +236,31 @@ function getTotal(jsonObject,user_id){
         }
     }
     console.log("fetching codes")
+    let reduction = 0
     getCodesFromDB(user_id,(codes) => {
         console.log(codes)
         let codeData = getCodes()
         console.log(getCodes())
         codes.map((c)=>{
-            codeData[c].reduction
+            codeData.map((cd)=>{
+                if(cd.name === c){
+                    if(reduction < cd.reduction)
+                        reduction = cd.reduction
+                }
+
+            })
         })
+
+        console.log(reduction)
+        console.log(total)
+        if(reduction>0){
+            return total*(reduction/100)
+        }
+        else{
+            return total
+        }
     })
-    console.log(total)
-    return total
+
 
 }
 
