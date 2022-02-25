@@ -235,7 +235,9 @@ function getTotal(jsonObject){
             }
         }
     }
+    console.log("fetching codes")
     getCodesFromDB(jsonObject.user_id,(codes) => {
+        console.log(codes)
         codes.map((c)=>{
             console.log(c)
         })
