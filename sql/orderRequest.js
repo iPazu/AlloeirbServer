@@ -227,7 +227,7 @@ async function setRanking(ranking,message,order_id){
 //need to be done
 function getTotal(jsonObject){
     let products  = getProducts()
-    let total = 0;
+    let total = 0.0;
     for(productid in jsonObject){
         for (let key in products) {
             if(products[key].id === productid){
@@ -235,7 +235,7 @@ function getTotal(jsonObject){
             }
         }
     }
-
+    console.log(total)
     return total
 
 }
