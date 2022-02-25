@@ -11,7 +11,7 @@ async function createOrder(jsonOrder,user_id,_then){
         conn = await pool.getConnection();
         let id = makeid(16);
         const res = await conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products),jsonOrder.adress,
+            [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products,user_id),jsonOrder.adress,
                 jsonOrder.products,jsonOrder.description
                 ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
         await setCoordonates(jsonOrder.adress,id);
@@ -225,7 +225,7 @@ async function setRanking(ranking,message,order_id){
     }
 }
 //need to be done
-function getTotal(jsonObject){
+function getTotal(jsonObject,user_id){
     let products  = getProducts()
     let total = 0.0;
     for(productid in jsonObject){
@@ -236,7 +236,7 @@ function getTotal(jsonObject){
         }
     }
     console.log("fetching codes")
-    getCodesFromDB(jsonObject.user_id,(codes) => {
+    getCodesFromDB(user_id,(codes) => {
         console.log(codes)
         codes.map((c)=>{
             console.log(c)
