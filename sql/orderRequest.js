@@ -244,7 +244,8 @@ async function getTotal(jsonObject,user_id,_then){
     let reduction = 0
     getCodesFromDB(user_id,(codes) => {
         let codeData = getCodes()
-        codes.map((c)=>{
+        console.log(codes)
+        codes.split(",").map((c)=>{
             codeData.map((cd)=>{
                 console.log(c)
                 console.log(cd)
