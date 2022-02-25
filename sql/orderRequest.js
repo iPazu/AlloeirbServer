@@ -1,5 +1,5 @@
 const pool = require("./database");
-const {getCurrentDate} = require("./userRequests");
+const {getCurrentDate, getCodesFromDB} = require("./userRequests");
 const axios = require("axios");
 const fs = require('fs');
 const {getProducts, setRunningOrderNumber, getRunningOrderNumber} = require("./productRequests");
@@ -235,6 +235,11 @@ function getTotal(jsonObject){
             }
         }
     }
+    getCodesFromDB(jsonObject.user_id,(codes) => {
+        codes.map((c)=>{
+            console.log(c)
+        })
+    })
     console.log(total)
     return total
 
