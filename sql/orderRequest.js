@@ -10,11 +10,11 @@ async function createOrder(jsonOrder,user_id,_then){
     try {
         conn = await pool.getConnection();
         let id = makeid(16);
-        getTotal().then(total=> {
+        getTotal(jsonOrder.products,user_id,(total)=> {
             console.log("from func")
             console.log(total)
             const res =  conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                [id,user_id,jsonOrder.firstname,jsonOrder.lastname, getTotal(jsonOrder.products,user_id),jsonOrder.adress,
+                [id,user_id,jsonOrder.firstname,jsonOrder.lastname, total,jsonOrder.adress,
                     jsonOrder.products,jsonOrder.description
                     ,jsonOrder.phone,getCurrentDate(),'undefined','validation','undefined','','','','','']);
              setCoordonates(jsonOrder.adress,id);
@@ -230,7 +230,7 @@ async function setRanking(ranking,message,order_id){
     }
 }
 //need to be done
-async function getTotal(jsonObject,user_id){
+async function getTotal(jsonObject,user_id,_then){
     let products  = getProducts()
     let total = 0.0;
     for(productid in jsonObject){
@@ -259,10 +259,10 @@ async function getTotal(jsonObject,user_id){
         console.log(reduction)
         console.log(total)
         if(reduction>0){
-            return total*(reduction/100)
+            _then(total*(reduction/100))
         }
         else{
-            return total
+            _then(total)
         }
     })
 
