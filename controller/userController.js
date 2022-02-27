@@ -130,6 +130,7 @@ module.exports.fetchProducts = async (req, res) => {
                 const newproduct = [...products];
 
                 console.log("ajeoijaioejhaioehaoehoaheiohaoejhaioehioaheoiaheoihaoehjaoehaheoiaheioae")
+                let o =0;
                 for(let i = 0; i<products.length; i++){
                         let have = false;
                         let p = products[i]
@@ -143,7 +144,8 @@ module.exports.fetchProducts = async (req, res) => {
                             }
                         })
                         if(!have){
-                            newproduct.splice(i, 1);
+                            newproduct.splice(i-o, 1);
+                            o++;
                         }
                 }
 
