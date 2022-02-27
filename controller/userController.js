@@ -133,10 +133,10 @@ module.exports.fetchProducts = async (req, res) => {
                             }
                         })
                         if(!have){
+                            console.log(p)
                             products.splice(index, 1);
                         }
                  })
-                console.log(JSON.stringify(products))
                 res.send(JSON.stringify(products));
 
 
