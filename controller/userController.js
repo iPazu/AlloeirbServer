@@ -138,7 +138,7 @@ module.exports.fetchProducts = async (req, res) => {
                         })
                         if(!have){
                             console.log(p)
-                            products.splice(index, 1);
+                            products.splice(i, 1);
                         }
                 }
 
