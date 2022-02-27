@@ -126,11 +126,10 @@ module.exports.fetchProducts = async (req, res) => {
 
             }).then( () => {
                 console.log(usercode)
-                console.log("eeeeeeee")
+                console.log("ajeoijaioejhaioehaoehoaheiohaoejhaioehioaheoiaheoihaoehjaoehaheoiaheioae")
                 for(let i = 0; i<products.length; i++){
                         let have = false;
                         let p = products[i]
-                        console.log(p)
                         usercode.split(',').map((c) => {
                             if(c === p.code){
                                 have = true;
