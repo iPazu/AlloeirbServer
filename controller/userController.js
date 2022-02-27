@@ -134,8 +134,8 @@ module.exports.fetchProducts = async (req, res) => {
                                 have = true;
                             }
                         })
-                    console.log(p)
                         if(!have){
+                            console.log(p)
                             products.splice(index, 1);
                         }
                  })
