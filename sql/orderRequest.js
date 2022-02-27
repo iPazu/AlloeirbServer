@@ -11,8 +11,6 @@ async function createOrder(jsonOrder,user_id,_then){
         conn = await pool.getConnection();
         let id = makeid(16);
         getTotal(jsonOrder.products,user_id,(total)=> {
-            console.log("from func")
-            console.log(total)
             const res =  conn.query("INSERT INTO orders value (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 [id,user_id,jsonOrder.firstname,jsonOrder.lastname, total,jsonOrder.adress,
                     jsonOrder.products,jsonOrder.description
@@ -240,28 +238,20 @@ async function getTotal(jsonObject,user_id,_then){
             }
         }
     }
-    console.log("fetching codes")
     let reduction = 0
     getCodesFromDB(user_id,(codes) => {
         let codeData = getCodes()
-        console.log(codes)
         codes.split(",").map((c)=>{
             codeData.map((cd)=>{
-                console.log(c)
-                console.log(cd)
-                console.log("-----")
                 if(cd.name === c){
                     if(reduction < cd.reduction){
                         reduction = cd.reduction
-                        console.log(reduction)
                     }
                 }
 
             })
         })
 
-        console.log(reduction)
-        console.log(total)
         _then(total - total*(reduction/100))
     })
 
