@@ -119,7 +119,6 @@ module.exports.fetchProducts = async (req, res) => {
     if(req.user_id){
         try {
             let products = [...getProducts()];
-            console.log(products)
             let usercode = null;
             userRequest.getCodesFromDB(req.user_id,(codes) => {
                 usercode = codes;
