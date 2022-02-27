@@ -131,7 +131,9 @@ module.exports.fetchProducts = async (req, res) => {
                 for(let i = 0; i<products.length; i++){
                         let have = false;
                         let p = products[i]
-                         console.log(p)
+                    console.log(i)
+
+                    console.log(p)
 
                     usercode.split(',').map((c) => {
                             if(c === p.code){
