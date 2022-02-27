@@ -147,7 +147,7 @@ module.exports.fetchProducts = async (req, res) => {
                         }
                 }
 
-            res.send(JSON.stringify(products));
+            res.send(JSON.stringify(newproduct));
 
 
             }) } catch (error) {
