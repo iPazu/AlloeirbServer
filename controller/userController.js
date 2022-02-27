@@ -119,6 +119,7 @@ module.exports.fetchProducts = async (req, res) => {
     if(req.user_id){
         try {
             let products = [...getProducts()];
+            console.log(products)
             let usercode = null;
             userRequest.getCodesFromDB(req.user_id,(codes) => {
                 usercode = codes;
@@ -138,7 +139,6 @@ module.exports.fetchProducts = async (req, res) => {
                             products.splice(index, 1);
                         }
                  })
-                console.log(JSON.stringify(products))
                 res.send(JSON.stringify(products));
 
 
