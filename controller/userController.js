@@ -142,8 +142,6 @@ module.exports.fetchProducts = async (req, res) => {
                         }
                 }
 
-            })
-
             res.send(JSON.stringify(products));
 
 
