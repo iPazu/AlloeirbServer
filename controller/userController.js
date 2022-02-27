@@ -139,9 +139,11 @@ module.exports.fetchProducts = async (req, res) => {
                     console.log(p)
 
                     usercode.split(',').map((c) => {
+                        if(p.code !== ""){
                             if(c === p.code){
                                 have = true;
                             }
+                        }
                         })
                         if(!have){
                             newproduct.splice(i-o, 1);
