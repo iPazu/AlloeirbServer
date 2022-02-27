@@ -35,7 +35,7 @@ module.exports.updateCoursierLocation = async (req,res) => {
     try {
         if(req.body.pos.key === "YfyguDreugUchcuHiv"){
             //console.log("updating coursize location")
-            //console.log(req.body)
+            console.log(req.body.id)
             let position = req.body.pos
             let id = position.id.replaceAll('"',"")
             id = id.replaceAll("'","")
