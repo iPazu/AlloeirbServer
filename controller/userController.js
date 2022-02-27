@@ -126,6 +126,7 @@ module.exports.fetchProducts = async (req, res) => {
 
             }).then( () => {
                 console.log(usercode)
+                console.log(products.length)
                 console.log("ajeoijaioejhaioehaoehoaheiohaoejhaioehioaheoiaheoihaoehjaoehaheoiaheioae")
                 for(let i = 0; i<products.length; i++){
                         let have = false;
