@@ -34,15 +34,15 @@ async function checkPrivilege(req,_then){
 module.exports.updateCoursierLocation = async (req,res) => {
     try {
         if(req.body.pos.key === "YfyguDreugUchcuHiv"){
-            console.log("updating coursize location")
-            console.log(req.body)
+            //console.log("updating coursize location")
+            //console.log(req.body)
             let position = req.body.pos
             let id = position.id.replaceAll('"',"")
             id = id.replaceAll("'","")
             id = id.replaceAll("'","")
             id = id.replaceAll(" ","")
             coursierLocation[id] = {latitude: position.latitude,longitude: position.longitude}
-            console.log(coursierLocation)
+           // console.log(coursierLocation)
             res.sendStatus(200)
         }
     }catch (error){
