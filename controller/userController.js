@@ -127,16 +127,18 @@ module.exports.fetchProducts = async (req, res) => {
                 console.log(usercode)
                 products.map((p,index) => {
                         let have = false;
+
                         usercode.split(',').map((c) => {
                             if(c === p.code){
                                 have = true;
                             }
                         })
+                    console.log(p)
                         if(!have){
-                            console.log(p)
                             products.splice(index, 1);
                         }
                  })
+                console.log(JSON.stringify(products))
                 res.send(JSON.stringify(products));
 
 
