@@ -126,9 +126,11 @@ module.exports.fetchProducts = async (req, res) => {
 
             }).then( () => {
                 console.log(usercode)
-                products.map((p,index) => {
+                console.log("eeeeeeee")
+                for(let i = 0; i<products.length; i++){
                         let have = false;
-
+                        let p = products[i]
+                        console.log(p)
                         usercode.split(',').map((c) => {
                             if(c === p.code){
                                 have = true;
@@ -138,8 +140,11 @@ module.exports.fetchProducts = async (req, res) => {
                             console.log(p)
                             products.splice(index, 1);
                         }
-                 })
-                res.send(JSON.stringify(products));
+                }
+
+            })
+
+            res.send(JSON.stringify(products));
 
 
             }) } catch (error) {
