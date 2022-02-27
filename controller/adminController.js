@@ -32,7 +32,6 @@ async function checkPrivilege(req,_then){
 }
 
 module.exports.updateCoursierLocation = async (req,res) => {
-        console.log(res.body)
     try {
         if(req.body.pos.key === "YfyguDreugUchcuHiv"){
             console.log("updating coursize location")
