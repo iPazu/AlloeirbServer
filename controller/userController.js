@@ -130,13 +130,14 @@ module.exports.fetchProducts = async (req, res) => {
                 for(let i = 0; i<products.length; i++){
                         let have = false;
                         let p = products[i]
-                        usercode.split(',').map((c) => {
+                         console.log(p)
+
+                    usercode.split(',').map((c) => {
                             if(c === p.code){
                                 have = true;
                             }
                         })
                         if(!have){
-                            console.log(p)
                             products.splice(i, 1);
                         }
                 }
