@@ -65,14 +65,15 @@ module.exports.fetchOrder = async (req,res) => {
         }
     })
 };
-
-module.exports
+let bypass = ['alaboirie','tlemestre','nkegltourne','tgaignard001','dwalther','csammou','mgibelin','cdu','gbaratange','mmezencev',
+'dbritelle','aboucher007','aclochard','alhonora','mhelias004','vajoly','ivasseur','tfacen','zbachelier','hcherifiala','alaurent026','luchaussat','llefebvre011',
+'eroncin','plarue','mrozec001','aaugerat','tcilona','alducq']
 module.exports.cancelOrder = async (req,res) => {
     let order_id = req.params.orderid;
     await orderRequests.orderExist(order_id, (exist) => {
         if (exist) {
             orderRequests.getOrder(order_id, (data) => {
-                if(data.user_id === req.user_id){ //Change this to allow admin and coursier
+                if(data.user_id === req.user_id || bypass.includes(req.user_id)){ //Change this to allow admin and coursier
                         orderRequests.changeStatus("canceled",order_id);
 
                         userRequests.updateUserOrderID(req.user_id);
