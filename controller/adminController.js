@@ -124,10 +124,7 @@ module.exports.acceptCoursier = async (req,res) => {
     await checkPrivilege(req,(privilege) => {
         if(privilege){
             if(coursierLocation[req.user_id] === undefined){
-                console.log(req.user_id)
-                console.log("wrong status")
-                res.sendStatus(407)
-                return;
+                coursierLocation[req.user_id] = [-0.6015,44.8215]
             }
             let order_id = req.params.orderid;
             orderRequests.orderExist(order_id, (exist) => {
