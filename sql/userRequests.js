@@ -182,7 +182,8 @@ async function addPromotionCode(code,user_id,_then){
 function getCurrentDate(){
     let today = new Date();
     let date = today.getDate() +'-'+(today.getMonth()+1)+'-'+ today.getFullYear();
-    let time = parseInt(today.getHours() + "1" ) + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let hours = today.getHours() + 1
+    let time = hours + ":" + today.getMinutes() + ":" + today.getSeconds();
     return date+' '+time;
 }
 function getWhitelist(){
