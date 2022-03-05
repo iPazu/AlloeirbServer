@@ -6,13 +6,36 @@ const {setRunningOrderNumber, getRunningOrderNumber} = require("../sql/productRe
 let qg = { alex:[ -0.6303,44.8108],noemie:[-0.5802,44.8056],alice:[ -0.5712,44.8389],dimitri:[ -0.5788,44.8234],antoinelh:[-0.6015,44.8215],theolm:[  -0.6031,44.8071]}
 
 let coursierLocation = {alaboirie: {latitude:qg['alex'][1],longitude:qg['alex'][0]},
-    nkegltourne: {latitude:qg['noemie'][1],longtitude:qg['noemie'][0]},
-    mrozec001: {latitude:qg['noemie'][1],longitude:qg['noemie'][0]},
-    tlemestre: {latitude:qg['theolm'][1],longtitude:qg['noemie'][0]},
-    tgainard001: {latitude:qg['alex'][1],longtitude:qg['alex'][0]},
-    tfacen: {latitude:qg['alex'][1],longtitude:qg['alex'][0]},
-    dwalther: {latitude:qg['dimitri'][1],longtitude:qg['dimitri'][0]},
-    iboukhars: {latitude:qg['alex'][1],longtitude:qg['alex'][0]}
+    tlemestre: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    nkegltourne: {latitude:qg['antoinelh'][1],longitude:qg['antoinelh'][0]},
+    tgaignard001: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    dwalther: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    csammou: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    mgibelin: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    cdu: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    gbaratange: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    mmezencev: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    dbritelle: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    aboucher007: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    aclochard: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    alhonora: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    mhelias004: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    vajoly: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    ivasseur: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    tfacen: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    zbachelier: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    hcherifiala: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    alaurent026: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    luchaussat: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    llefebvre011: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    eroncin: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    plarue: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    mrozec001: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    aaugerat: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    tcilona: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+    alducq: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
+
+
 
 
 }

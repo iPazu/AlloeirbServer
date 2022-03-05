@@ -67,7 +67,7 @@ module.exports.fetchOrder = async (req,res) => {
 };
 let bypass = ['alaboirie','tlemestre','nkegltourne','tgaignard001','dwalther','csammou','mgibelin','cdu','gbaratange','mmezencev',
 'dbritelle','aboucher007','aclochard','alhonora','mhelias004','vajoly','ivasseur','tfacen','zbachelier','hcherifiala','alaurent026','luchaussat','llefebvre011',
-'eroncin','plarue','mrozec001','aaugerat','tcilona','alducq']
+'eroncin','iboukhars','plarue','mrozec001','aaugerat','tcilona','alducq']
 module.exports.cancelOrder = async (req,res) => {
     let order_id = req.params.orderid;
     await orderRequests.orderExist(order_id, (exist) => {
