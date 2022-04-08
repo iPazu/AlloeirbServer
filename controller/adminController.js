@@ -3,7 +3,6 @@ const orderRequests = require('../sql/orderRequest')
 const userRequests = require('../sql/userRequests')
 const {order} = require("./orderController");
 const {setRunningOrderNumber, getRunningOrderNumber} = require("../sql/productRequests");
-let qg = { alex:[ -0.6303,44.8108],noemie:[-0.5802,44.8056],alice:[ -0.5712,44.8389],dimitri:[ -0.5788,44.8234],antoinelh:[-0.6015,44.8215],theolm:[  -0.6031,44.8071]}
 
 let coursierLocation = {alaboirie: {latitude:qg['alex'][1],longitude:qg['alex'][0]},
     tlemestre: {latitude:qg['antoinelh'][1],longtitude:qg['antoinelh'][0]},
